@@ -381,15 +381,11 @@ Kirjoita sähköposti, joka:
 Sävy: lämmin, ammattimainen, ei myyvä. Suomen kieli. Ei bullet-listoja — pelkkää juoksevaa tekstiä. Pituus: 150–220 sanaa. Kirjoita VAIN sähköpostin teksti, ei mitään muuta.`;
 
     try {
-      const res = await fetch('https://api.anthropic.com/v1/messages', {
+      const res = await fetch('/api', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'x-api-key': apiKey,
-          'anthropic-version': '2023-06-01',
-          'anthropic-dangerous-direct-browser-calls': 'true',
-        },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
+          _apiKey: apiKey,
           model: 'claude-sonnet-4-20250514',
           max_tokens: 1024,
           stream: true,
