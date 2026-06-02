@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="fi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>RN Media – Prospect Tool</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg:      #0e0e0e;
+      --surface: #161616;
+      --s2:      #1c1c1c;
+      --s3:      #222222;
+      --border:  #242424;
+      --border2: #303030;
+      --text:    #efefef;
+      --muted:   #777777;
+      --muted2:  #3d3d3d;
+      --white:   #ffffff;
+      --green:   #22c55e;
+      --red:     #ef4444;
+      --r:       10px;
+      --r-sm:    6px;
+    }
+
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      -webkit-font-smoothing: antialiased;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 48px 20px 80px;
+    }
+
+    /* ── HEADER ───────────────────────────────── */
+    .header {
+      width: 100%;
+      max-width: 640px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 40px;
+    }
+    .brand {
+      font-family: 'Anton', sans-serif;
+      font-size: 20px;
+      letter-spacing: 0.05em;
+      color: var(--white);
+    }
+    .brand-sep { width: 1px; height: 14px; background: var(--border2); }
+    .brand-sub {
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    /* ── CARD ─────────────────────────────────── */
+    .card {
+      width: 100%;
+      max-width: 640px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--r);
+      padding: 28px 28px 24px;
+      margin-bottom: 16px;
+    }
+    .card-title {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 18px;
+    }
+
+    /* ── FIELDS ───────────────────────────────── */
+    .field { margin-bottom: 14px; }
+    .field:last-child { margin-bottom: 0; }
+    .label {
+      display: block;
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 0.09em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 7px;
+    }
+    .input {
+      width: 100%;
+      background: var(--s2);
+      border: 1px solid var(--border2);
+      border-radius: var(--r-sm);
+      color: var(--text);
+      font-family: 'Inter', sans-serif;
+      font-size: 13px;
+      padding: 11px 14px;
+      outline: none;
+      transition: border-color 0.15s;
+    }
+    .input:focus { border-color: #4a4a4a; }
+    .input::placeholder { color: var(--muted2); }
+    .input.key-input {
+      font-family: 'Inter', monospace;
+      font-size: 12px;
+      letter-spacing: 0.02em;
+    }
+
+    .field-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    /* ── GENERATE BTN ─────────────────────────── */
+    .generate-btn {
+      width: 100%;
+      max-width: 640px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      background: var(--white);
+      color: #111;
+      font-family: 'Inter', sans-serif;
+      font-size: 14px;
+      font-weight: 600;
+      padding: 14px;
+      border: none;
+      border-radius: var(--r-sm);
+      cursor: pointer;
+      transition: background 0.15s, transform 0.1s;
+      margin-bottom: 20px;
+    }
+    .generate-btn:hover { background: #e8e8e8; }
+    .generate-btn:active { transform: scale(0.99); }
+    .generate-btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    /* ── SPINNER ──────────────────────────────── */
+    .spinner {
+      width: 16px;
+      height: 16px;
+      border: 2px solid rgba(0,0,0,0.2);
+      border-top-color: #111;
+      border-radius: 50%;
+      animation: spin 0.7s linear infinite;
+      display: none;
+      flex-shrink: 0;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .generate-btn.loading .spinner { display: block; }
+    .generate-btn.loading .btn-label { opacity: 0.6; }
+
+    /* ── OUTPUT ───────────────────────────────── */
+    .output-wrap {
+      width: 100%;
+      max-width: 640px;
+      display: none;
+    }
+    .output-wrap.visible { display: block; }
+
+    .output-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+    .output-label {
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+    .copy-btn {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.05em;
+      color: var(--muted);
+      background: var(--s2);
+      border: 1px solid var(--border2);
+      border-radius: var(--r-sm);
+      padding: 6px 12px;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .copy-btn:hover { color: var(--text); border-color: #444; }
+    .copy-btn.copied {
+      color: var(--green);
+      border-color: #14532d;
+      background: #071910;
+    }
+
+    .output-box {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--r);
+      padding: 24px 26px;
+      font-size: 14px;
+      font-weight: 300;
+      line-height: 1.85;
+      color: var(--text);
+      white-space: pre-wrap;
+      word-break: break-word;
+      min-height: 120px;
+    }
+
+    /* ── ERROR ────────────────────────────────── */
+    .error-box {
+      width: 100%;
+      max-width: 640px;
+      display: none;
+      background: #140404;
+      border: 1px solid #7f1d1d;
+      border-radius: var(--r-sm);
+      padding: 12px 16px;
+      font-size: 13px;
+      color: var(--red);
+      font-weight: 500;
+      margin-bottom: 16px;
+    }
+    .error-box.visible { display: block; }
+
+    /* ── KEY HINT ─────────────────────────────── */
+    .key-hint {
+      font-size: 11px;
+      color: var(--muted2);
+      margin-top: 6px;
+    }
+    .key-hint a { color: var(--muted); text-decoration: none; border-bottom: 1px solid var(--muted2); }
+    .key-hint a:hover { color: var(--text); }
+
+    /* ── STREAMING CURSOR ─────────────────────── */
+    .cursor {
+      display: inline-block;
+      width: 2px;
+      height: 1em;
+      background: var(--muted);
+      margin-left: 2px;
+      vertical-align: text-bottom;
+      animation: blink 0.9s step-end infinite;
+    }
+    @keyframes blink { 50% { opacity: 0; } }
+
+    @media (max-width: 480px) {
+      body { padding: 28px 14px 60px; }
+      .field-row { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="header">
+    <span class="brand">RN MEDIA</span>
+    <div class="brand-sep"></div>
+    <span class="brand-sub">Prospect Tool</span>
+  </div>
+
+  <!-- API KEY -->
+  <div class="card">
+    <div class="card-title">API-avain</div>
+    <div class="field">
+      <label class="label" for="api-key">Anthropic API Key</label>
+      <input class="input key-input" type="password" id="api-key"
+        placeholder="sk-ant-api03-..."
+        autocomplete="off" spellcheck="false">
+      <div class="key-hint">Avain tallennetaan vain selaimen muistiin eikä lähde minnekään.</div>
+    </div>
+  </div>
+
+  <!-- PROSPECT INFO -->
+  <div class="card">
+    <div class="card-title">Prospektin tiedot</div>
+    <div class="field-row">
+      <div class="field">
+        <label class="label" for="biz-name">Yrityksen nimi</label>
+        <input class="input" type="text" id="biz-name" placeholder="Kahvila Koivu">
+      </div>
+      <div class="field">
+        <label class="label" for="ig-handle">Instagram</label>
+        <input class="input" type="text" id="ig-handle" placeholder="@kahvilakoivu">
+      </div>
+    </div>
+    <div class="field" style="margin-top:14px;">
+      <label class="label" for="extra-notes">Lisätietoja (vapaaehtoinen)</label>
+      <input class="input" type="text" id="extra-notes"
+        placeholder="esim. paikallinen kahvila, myy erikoiskahveja, tunnelmalliset kuvat">
+    </div>
+  </div>
+
+  <!-- GENERATE -->
+  <button class="generate-btn" id="gen-btn" onclick="generate()">
+    <div class="spinner"></div>
+    <span class="btn-label">Generoi sähköposti</span>
+  </button>
+
+  <!-- ERROR -->
+  <div class="error-box" id="error-box"></div>
+
+  <!-- OUTPUT -->
+  <div class="output-wrap" id="output-wrap">
+    <div class="output-header">
+      <div class="output-label">Generoitu sähköposti</div>
+      <button class="copy-btn" id="copy-btn" onclick="copyOutput()">
+        <svg width="12" height="12" viewBox="0 0 16 16" fill="none">
+          <rect x="5" y="5" width="9" height="9" rx="1.5" stroke="currentColor" stroke-width="1.5"/>
+          <path d="M11 5V3.5A1.5 1.5 0 009.5 2h-6A1.5 1.5 0 002 3.5v6A1.5 1.5 0 003.5 11H5" stroke="currentColor" stroke-width="1.5"/>
+        </svg>
+        Kopioi
+      </button>
+    </div>
+    <div class="output-box" id="output-box"></div>
+  </div>
+
+<script>
+  // Restore API key from sessionStorage (clears when tab closes)
+  const keyInput = document.getElementById('api-key');
+  keyInput.value = sessionStorage.getItem('rn_api_key') || '';
+  keyInput.addEventListener('input', () => {
+    sessionStorage.setItem('rn_api_key', keyInput.value.trim());
+  });
+
+  async function generate() {
+    const apiKey  = document.getElementById('api-key').value.trim();
+    const bizName = document.getElementById('biz-name').value.trim();
+    const igHandle = document.getElementById('ig-handle').value.trim();
+    const notes   = document.getElementById('extra-notes').value.trim();
+
+    // Validation
+    const errBox = document.getElementById('error-box');
+    errBox.className = 'error-box';
+
+    if (!apiKey) return showError('Syötä Anthropic API-avain.');
+    if (!bizName) return showError('Syötä yrityksen nimi.');
+    if (!igHandle) return showError('Syötä Instagram-tili.');
+
+    const btn = document.getElementById('gen-btn');
+    btn.disabled = true;
+    btn.classList.add('loading');
+    btn.querySelector('.btn-label').textContent = 'Generoidaan...';
+
+    const outWrap = document.getElementById('output-wrap');
+    const outBox  = document.getElementById('output-box');
+    outWrap.className = 'output-wrap visible';
+    outBox.innerHTML = '<span class="cursor"></span>';
+
+    const copyBtn = document.getElementById('copy-btn');
+    copyBtn.className = 'copy-btn';
+    copyBtn.querySelector('svg + *') && null;
+
+    const ig = igHandle.startsWith('@') ? igHandle : '@' + igHandle;
+
+    const prompt = `Sinä olet Nikolas RN Medialta — suomalainen sosiaalisen median toimisto joka tekee laadukasta sisältöä yrityksille. Olet tutustunut prospektiin ja kirjoitat heille lämpimän, henkilökohtaisen kylmäkontaktisähköpostin suomeksi.
+
+Prospektin tiedot:
+- Yritys: ${bizName}
+- Instagram: ${ig}${notes ? '\n- Lisätietoja: ' + notes : ''}
+
+Kirjoita sähköposti, joka:
+1. Alkaa tervehdyksellä (ei "Hei [nimi]" -templatella, vaan jotain luontevampaa)
+2. Kehuu jotain SPESIFISTÄ heidän brändissään tai sometilillään — älä ole geneerinen, keksi uskottava yksityiskohta Instagram-tilin pohjalta
+3. Tunnistaa konkreettisen sisältömahdollisuuden juuri heille — esim. millainen sisältö sopisi heidän toimialalleen ja yleisölleen
+4. Esittelee RN Median lyhyesti ja luontevasti
+5. Päättyy TÄSMÄLLEEN näin: "Teillä on kaikki mitä siihen tarvitaan, puuttuu vain tekijä."
+6. Sisältää lopputervehdyksen ja allekirjoituksen: Nikolas / RN Media / rnmedia.fi
+
+Sävy: lämmin, ammattimainen, ei myyvä. Suomen kieli. Ei bullet-listoja — pelkkää juoksevaa tekstiä. Pituus: 150–220 sanaa. Kirjoita VAIN sähköpostin teksti, ei mitään muuta.`;
+
+    try {
+      const res = await fetch('https://api.anthropic.com/v1/messages', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'x-api-key': apiKey,
+          'anthropic-version': '2023-06-01',
+          'anthropic-dangerous-direct-browser-calls': 'true',
+        },
+        body: JSON.stringify({
+          model: 'claude-sonnet-4-20250514',
+          max_tokens: 1024,
+          stream: true,
+          messages: [{ role: 'user', content: prompt }],
+        }),
+      });
+
+      if (!res.ok) {
+        const err = await res.json().catch(() => ({}));
+        throw new Error(err?.error?.message || `HTTP ${res.status}`);
+      }
+
+      // Stream
+      const reader = res.body.getReader();
+      const decoder = new TextDecoder();
+      let text = '';
+      let buf = '';
+
+      outBox.innerHTML = '<span class="cursor"></span>';
+
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) break;
+        buf += decoder.decode(value, { stream: true });
+        const lines = buf.split('\n');
+        buf = lines.pop();
+
+        for (const line of lines) {
+          if (!line.startsWith('data: ')) continue;
+          const data = line.slice(6).trim();
+          if (data === '[DONE]') continue;
+          try {
+            const evt = JSON.parse(data);
+            if (evt.type === 'content_block_delta' && evt.delta?.type === 'text_delta') {
+              text += evt.delta.text;
+              outBox.innerHTML = escHtml(text) + '<span class="cursor"></span>';
+              outBox.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            }
+          } catch { /* ignore parse errors */ }
+        }
+      }
+
+      // Final — remove cursor
+      outBox.textContent = text;
+
+    } catch (e) {
+      outWrap.className = 'output-wrap';
+      showError('Virhe: ' + e.message);
+    } finally {
+      btn.disabled = false;
+      btn.classList.remove('loading');
+      btn.querySelector('.btn-label').textContent = 'Generoi uudelleen';
+    }
+  }
+
+  function showError(msg) {
+    const box = document.getElementById('error-box');
+    box.textContent = msg;
+    box.className = 'error-box visible';
+  }
+
+  function escHtml(s) {
+    return s
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/\n/g, '<br>');
+  }
+
+  async function copyOutput() {
+    const text = document.getElementById('output-box').textContent;
+    if (!text) return;
+    try {
+      await navigator.clipboard.writeText(text);
+      const btn = document.getElementById('copy-btn');
+      btn.className = 'copy-btn copied';
+      btn.innerHTML = `<svg width="12" height="12" viewBox="0 0 16 16" fill="none"><path d="M2.5 8.5l4 4 7-8" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg> Kopioitu!`;
+      setTimeout(() => {
+        btn.className = 'copy-btn';
+        btn.innerHTML = `<svg width="12" height="12" viewBox="0 0 16 16" fill="none"><rect x="5" y="5" width="9" height="9" rx="1.5" stroke="currentColor" stroke-width="1.5"/><path d="M11 5V3.5A1.5 1.5 0 009.5 2h-6A1.5 1.5 0 002 3.5v6A1.5 1.5 0 003.5 11H5" stroke="currentColor" stroke-width="1.5"/></svg> Kopioi`;
+      }, 2000);
+    } catch {
+      showError('Kopiointi epäonnistui — valitse teksti manuaalisesti.');
+    }
+  }
+
+  // Enter key on inputs
+  document.querySelectorAll('.input').forEach(el => {
+    el.addEventListener('keydown', e => { if (e.key === 'Enter') generate(); });
+  });
+</script>
+</body>
+</html>
