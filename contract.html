@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>RN Media – Asiakassopimus</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@300;400;500;600;700&family=Paytone+One&display=swap" rel="stylesheet">
   <style>
     /* ── RESET ───────────────────────────────────────── */
     *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
@@ -83,62 +83,11 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      margin-bottom: 18px;
+      margin-bottom: 16px;
     }
-    .logo-main {
-      display: flex;
-      align-items: center;
-      gap: 0;
-      margin-bottom: 5px;
-    }
-    .logo-box {
-      border: 2.5px solid #000;
-      padding: 3px 8px 3px 8px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      margin-right: 6px;
-    }
-    .logo-rn {
-      font-family: 'Anton', sans-serif;
-      font-size: 28px;
-      letter-spacing: 0.01em;
-      line-height: 1;
-      color: #000;
-    }
-    .logo-media-wrap {
-      display: flex;
-      flex-direction: column;
-      align-items: flex-start;
-      line-height: 1;
-    }
-    .logo-media {
-      font-family: 'Anton', sans-serif;
-      font-size: 28px;
-      letter-spacing: 0.01em;
-      color: #000;
-      line-height: 1;
-    }
-    .logo-dot {
-      font-size: 10px;
-      color: #000;
-      align-self: flex-end;
-      margin-top: -3px;
-      margin-left: 1px;
-    }
-    .logo-sub {
-      display: flex;
-      justify-content: space-between;
-      width: 170px;
-      margin-top: 4px;
-    }
-    .logo-sub-text {
-      font-size: 7px;
-      font-weight: 600;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      color: #000;
-      line-height: 1.4;
+    .logo-svg-wrap {
+      width: 420px;
+      height: auto;
     }
     .logo-rule {
       border: none;
@@ -459,8 +408,8 @@
       .sec-title { font-size: 9px; margin-bottom: 5px; }
       .sec-body { font-size: 9px; line-height: 1.45; }
       .doc-title { font-size: 17px; margin-bottom: 13px; }
-      .logo-area { margin-bottom: 12px; }
-      .logo-rn, .logo-media { font-size: 24px; }
+      .logo-area { margin-bottom: 10px; }
+      .logo-svg-wrap { width: 340px; }
       .field-row { margin-bottom: 2px; font-size: 9px; }
       .f { font-size: 9px; }
       .pkg-table { font-size: 8.5px; }
@@ -512,18 +461,40 @@
 
     <!-- LOGO -->
     <div class="logo-area">
-      <div class="logo-main">
-        <div class="logo-box">
-          <span class="logo-rn">RN</span>
-        </div>
-        <div class="logo-media-wrap">
-          <span class="logo-media">Media</span>
-          <span class="logo-dot">●</span>
-        </div>
-      </div>
-      <div class="logo-sub">
-        <span class="logo-sub-text">CONTENT STUDIO<br>FINLAND</span>
-        <span class="logo-sub-text" style="text-align:right">SINCE<br>2026</span>
+      <div class="logo-svg-wrap">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 560 210" width="420" height="158">
+          <defs>
+            <style>
+              .logo-media-text { font-family: 'Paytone One', 'Arial Black', sans-serif; }
+              .logo-rn-text    { font-family: 'Anton', 'Arial Black', sans-serif; }
+              .logo-tag-text   { font-family: 'Inter', 'Arial', sans-serif; }
+            </style>
+          </defs>
+
+          <!-- 3D Box: right face -->
+          <polygon points="178,22 208,2 208,152 178,172" fill="#111"/>
+          <!-- 3D Box: top face -->
+          <polygon points="28,22 178,22 208,2 58,2" fill="#1a1a1a"/>
+          <!-- 3D Box: front face -->
+          <rect x="28" y="22" width="150" height="150" fill="#000"/>
+
+          <!-- RN inside box — white bold letters -->
+          <text x="103" y="126" text-anchor="middle" fill="white" font-size="90" font-weight="900" letter-spacing="-2" class="logo-rn-text">RN</text>
+
+          <!-- "Media" text -->
+          <text x="232" y="152" fill="#000" font-size="108" font-weight="900" class="logo-media-text">Media</text>
+
+          <!-- Dot below "a" in Media -->
+          <circle cx="527" cy="180" r="16" fill="#000"/>
+
+          <!-- CONTENT STUDIO / FINLAND — bottom left -->
+          <text x="28" y="186" fill="#000" font-size="11" font-weight="700" letter-spacing="1.2" class="logo-tag-text">CONTENT STUDIO</text>
+          <text x="28" y="200" fill="#000" font-size="11" font-weight="700" letter-spacing="1.2" class="logo-tag-text">FINLAND</text>
+
+          <!-- SINCE / 2026 — bottom right -->
+          <text x="532" y="186" fill="#000" font-size="11" font-weight="700" letter-spacing="1.2" text-anchor="end" class="logo-tag-text">SINCE</text>
+          <text x="532" y="200" fill="#000" font-size="11" font-weight="700" letter-spacing="1.2" text-anchor="end" class="logo-tag-text">2026</text>
+        </svg>
       </div>
     </div>
 
@@ -618,7 +589,7 @@
               <td>
                 <label for="pkg4" style="cursor:pointer">
                   <div class="pkg-name">KERTATILAUS</div>
-                  <div class="pkg-price">€99–€349</div>
+                  <div class="pkg-price" style="color:#888;font-size:8.5px;font-weight:400;">Hinta sovitaan erikseen</div>
                 </label>
               </td>
               <td class="pkg-desc">Kertaluonteinen projekti<br>(tarkenna alla)</td>
