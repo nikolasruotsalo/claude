@@ -1,0 +1,870 @@
+<!DOCTYPE html>
+<html lang="fi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>RN Media – Asiakassopimus</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    /* ── RESET ───────────────────────────────────────── */
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    /* ── SCREEN SHELL ────────────────────────────────── */
+    body {
+      font-family: 'Inter', sans-serif;
+      background: #2a2a2a;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 32px 20px 60px;
+      min-height: 100vh;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ── TOOLBAR ─────────────────────────────────────── */
+    .toolbar {
+      width: 100%;
+      max-width: 794px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 20px;
+    }
+    .toolbar-brand {
+      font-family: 'Anton', sans-serif;
+      font-size: 14px;
+      letter-spacing: 0.08em;
+      color: #aaa;
+    }
+    .toolbar-hint {
+      font-size: 11px;
+      color: #666;
+    }
+    .print-btn {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      background: #fff;
+      color: #111;
+      font-family: 'Inter', sans-serif;
+      font-size: 12px;
+      font-weight: 600;
+      padding: 9px 18px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+    .print-btn:hover { background: #e8e8e8; }
+
+    /* ── DOCUMENT SHEET ──────────────────────────────── */
+    .doc {
+      width: 794px;
+      background: #fff;
+      color: #000;
+      box-shadow: 0 4px 40px rgba(0,0,0,0.5);
+      font-size: 10.5px;
+      line-height: 1.5;
+    }
+
+    /* ── PAGE ────────────────────────────────────────── */
+    .page {
+      padding: 46px 52px 42px;
+      min-height: 1122px;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+    }
+    .page-1 { border-bottom: 2px dashed #ddd; }
+
+    /* ── LOGO ────────────────────────────────────────── */
+    .logo-area {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-bottom: 18px;
+    }
+    .logo-main {
+      display: flex;
+      align-items: center;
+      gap: 0;
+      margin-bottom: 5px;
+    }
+    .logo-box {
+      border: 2.5px solid #000;
+      padding: 3px 8px 3px 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-right: 6px;
+    }
+    .logo-rn {
+      font-family: 'Anton', sans-serif;
+      font-size: 28px;
+      letter-spacing: 0.01em;
+      line-height: 1;
+      color: #000;
+    }
+    .logo-media-wrap {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      line-height: 1;
+    }
+    .logo-media {
+      font-family: 'Anton', sans-serif;
+      font-size: 28px;
+      letter-spacing: 0.01em;
+      color: #000;
+      line-height: 1;
+    }
+    .logo-dot {
+      font-size: 10px;
+      color: #000;
+      align-self: flex-end;
+      margin-top: -3px;
+      margin-left: 1px;
+    }
+    .logo-sub {
+      display: flex;
+      justify-content: space-between;
+      width: 170px;
+      margin-top: 4px;
+    }
+    .logo-sub-text {
+      font-size: 7px;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: #000;
+      line-height: 1.4;
+    }
+    .logo-rule {
+      border: none;
+      border-top: 1.5px solid #000;
+      width: 100%;
+      margin-bottom: 14px;
+    }
+    .doc-title {
+      font-family: 'Anton', sans-serif;
+      font-size: 20px;
+      letter-spacing: 0.08em;
+      text-align: center;
+      color: #000;
+      margin-bottom: 18px;
+    }
+
+    /* ── SECTIONS ────────────────────────────────────── */
+    .sec {
+      margin-bottom: 13px;
+    }
+    .sec-title {
+      font-size: 10.5px;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      border-bottom: 1.2px solid #000;
+      padding-bottom: 2px;
+      margin-bottom: 7px;
+    }
+    .sec-body {
+      font-size: 10px;
+      line-height: 1.55;
+    }
+
+    /* ── FILL FIELDS ─────────────────────────────────── */
+    .f {
+      display: inline-block;
+      min-width: 120px;
+      border-bottom: 1px solid #000;
+      outline: none;
+      font-family: 'Inter', sans-serif;
+      font-size: 10px;
+      line-height: 1.4;
+      padding: 0 2px 1px;
+      color: #000;
+      cursor: text;
+      transition: background 0.1s;
+    }
+    .f:focus { background: #fffde7; }
+    .f.w-sm { min-width: 80px; }
+    .f.w-md { min-width: 160px; }
+    .f.w-lg { min-width: 220px; }
+    .f.w-xl { min-width: 300px; }
+    .f.w-full { min-width: 100%; display: block; }
+
+    .field-row {
+      display: flex;
+      align-items: baseline;
+      gap: 4px;
+      margin-bottom: 3px;
+      font-size: 10px;
+    }
+    .field-label { font-weight: 600; white-space: nowrap; }
+
+    /* ── PACKAGES TABLE ──────────────────────────────── */
+    .pkg-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 9.5px;
+      margin-top: 4px;
+      margin-bottom: 5px;
+    }
+    .pkg-table th {
+      background: #000;
+      color: #fff;
+      font-weight: 600;
+      letter-spacing: 0.05em;
+      padding: 4px 8px;
+      text-align: left;
+    }
+    .pkg-table td {
+      border: 1px solid #ccc;
+      padding: 5px 8px;
+      vertical-align: middle;
+    }
+    .pkg-table tr:nth-child(even) td { background: #f8f8f8; }
+    .pkg-check {
+      width: 20px;
+      text-align: center;
+    }
+    .pkg-check input[type="checkbox"] {
+      width: 12px;
+      height: 12px;
+      cursor: pointer;
+      accent-color: #000;
+    }
+    .pkg-name { font-weight: 700; font-size: 10px; }
+    .pkg-price { font-weight: 600; white-space: nowrap; }
+    .pkg-desc { color: #333; font-size: 9px; }
+    .pkg-notes-cell { min-width: 120px; }
+    .pkg-notes {
+      border: none;
+      border-bottom: 1px solid #aaa;
+      outline: none;
+      font-family: 'Inter', sans-serif;
+      font-size: 9px;
+      width: 100%;
+      background: transparent;
+      padding: 1px 2px;
+    }
+    .pkg-notes:focus { background: #fffde7; }
+
+    /* ── DURATION SECTION ────────────────────────────── */
+    .type-row {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 4px;
+    }
+    .type-row label {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 10px;
+      cursor: pointer;
+    }
+    .type-row input[type="radio"] {
+      width: 11px;
+      height: 11px;
+      accent-color: #000;
+      cursor: pointer;
+    }
+
+    /* ── PAYMENT TABLE ───────────────────────────────── */
+    .pay-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 9.5px;
+      margin-top: 4px;
+      margin-bottom: 5px;
+    }
+    .pay-table th {
+      background: #000;
+      color: #fff;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      padding: 4px 8px;
+      text-align: left;
+    }
+    .pay-table td {
+      border: 1px solid #ccc;
+      padding: 4px 8px;
+      vertical-align: middle;
+    }
+    .pay-table tr:nth-child(even) td { background: #f8f8f8; }
+    .pay-input {
+      border: none;
+      border-bottom: 1px solid #aaa;
+      outline: none;
+      font-family: 'Inter', sans-serif;
+      font-size: 9.5px;
+      width: 100%;
+      background: transparent;
+      padding: 1px 2px;
+    }
+    .pay-input:focus { background: #fffde7; }
+
+    /* ── ITALIC NOTE ─────────────────────────────────── */
+    .note {
+      font-size: 9px;
+      font-style: italic;
+      color: #333;
+      line-height: 1.5;
+    }
+
+    /* ── SUBSECTION ──────────────────────────────────── */
+    .subsec { margin-bottom: 6px; }
+    .subsec-title { font-weight: 700; font-size: 10px; margin-bottom: 2px; }
+
+    /* ── SIGNATURE BLOCK ─────────────────────────────── */
+    .sig-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 32px;
+      margin-top: 10px;
+      margin-bottom: 14px;
+    }
+    .sig-col {}
+    .sig-line {
+      border-top: 1.2px solid #000;
+      margin-bottom: 5px;
+      margin-top: 28px;
+    }
+    .sig-name-label {
+      font-weight: 700;
+      font-size: 10px;
+      margin-bottom: 6px;
+    }
+    .sig-row {
+      display: flex;
+      align-items: baseline;
+      gap: 6px;
+      margin-bottom: 4px;
+      font-size: 10px;
+    }
+    .sig-row .field-label { font-weight: 600; white-space: nowrap; }
+
+    /* ── LIITE A ─────────────────────────────────────── */
+    .liite-title {
+      font-family: 'Anton', sans-serif;
+      font-size: 12px;
+      letter-spacing: 0.06em;
+      text-align: center;
+      margin-bottom: 3px;
+    }
+    .liite-sub {
+      font-size: 9px;
+      font-style: italic;
+      text-align: center;
+      color: #444;
+      margin-bottom: 10px;
+    }
+    .liite-rule {
+      border: none;
+      border-top: 1.2px solid #000;
+      margin-bottom: 10px;
+    }
+    .liite-fields {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 6px 24px;
+    }
+    .liite-field {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+    .liite-field.full { grid-column: 1 / -1; }
+    .liite-label {
+      font-size: 9.5px;
+      font-weight: 700;
+    }
+    .liite-input {
+      border: none;
+      border-bottom: 1px solid #000;
+      outline: none;
+      font-family: 'Inter', sans-serif;
+      font-size: 9.5px;
+      padding: 2px 2px;
+      background: transparent;
+      width: 100%;
+    }
+    .liite-input:focus { background: #fffde7; }
+    .liite-textarea {
+      border: 1px solid #aaa;
+      outline: none;
+      font-family: 'Inter', sans-serif;
+      font-size: 9px;
+      padding: 4px 6px;
+      background: transparent;
+      width: 100%;
+      resize: none;
+      line-height: 1.5;
+    }
+    .liite-textarea:focus { background: #fffde7; }
+
+    /* ── PAGE FOOTER ─────────────────────────────────── */
+    .page-footer {
+      margin-top: auto;
+      padding-top: 10px;
+      border-top: 1px solid #ddd;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 8.5px;
+      color: #888;
+    }
+
+    /* ── PRINT ───────────────────────────────────────── */
+    @media print {
+      @page { size: A4; margin: 0; }
+
+      body {
+        background: #fff !important;
+        padding: 0 !important;
+        display: block;
+      }
+
+      .toolbar { display: none !important; }
+
+      .doc {
+        width: 210mm;
+        box-shadow: none !important;
+        font-size: 9.5px;
+      }
+
+      .page {
+        padding: 28px 36px 24px;
+        min-height: 297mm;
+        max-height: 297mm;
+        overflow: hidden;
+        page-break-after: always;
+      }
+
+      .page:last-child { page-break-after: avoid; }
+
+      .page-1 {
+        border-bottom: none !important;
+      }
+
+      * {
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+      }
+
+      /* Tighter print spacing */
+      .sec { margin-bottom: 9px; }
+      .sec-title { font-size: 9px; margin-bottom: 5px; }
+      .sec-body { font-size: 9px; line-height: 1.45; }
+      .doc-title { font-size: 17px; margin-bottom: 13px; }
+      .logo-area { margin-bottom: 12px; }
+      .logo-rn, .logo-media { font-size: 24px; }
+      .field-row { margin-bottom: 2px; font-size: 9px; }
+      .f { font-size: 9px; }
+      .pkg-table { font-size: 8.5px; }
+      .pkg-table th { padding: 3px 6px; }
+      .pkg-table td { padding: 3px 6px; }
+      .pkg-name { font-size: 9px; }
+      .pkg-desc { font-size: 8px; }
+      .pay-table { font-size: 8.5px; }
+      .pay-table th { padding: 3px 6px; }
+      .pay-table td { padding: 3px 6px; }
+      .subsec { margin-bottom: 5px; }
+      .subsec-title { font-size: 9px; }
+      .note { font-size: 8.5px; }
+      .sig-grid { margin-top: 6px; margin-bottom: 10px; gap: 24px; }
+      .sig-line { margin-top: 20px; }
+      .sig-row { font-size: 9px; }
+      .sig-name-label { font-size: 9px; }
+      .liite-title { font-size: 11px; }
+      .liite-label { font-size: 9px; }
+      .liite-input { font-size: 9px; }
+      .type-row { margin-bottom: 3px; }
+      .type-row label { font-size: 9px; }
+      .page-footer { font-size: 7.5px; padding-top: 6px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- TOOLBAR -->
+<div class="toolbar">
+  <span class="toolbar-brand">RN MEDIA — Asiakassopimus</span>
+  <span class="toolbar-hint">Klikkaa kenttiä täyttääksesi · Tulosta PDF:nä</span>
+  <button class="print-btn" onclick="window.print()">
+    <svg width="13" height="13" viewBox="0 0 16 16" fill="none">
+      <path d="M4 6V1.5A.5.5 0 014.5 1h7a.5.5 0 01.5.5V6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+      <rect x="1" y="6" width="14" height="7" rx="1.5" stroke="currentColor" stroke-width="1.5"/>
+      <path d="M4 10h8M4 12.5h5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+      <circle cx="12.5" cy="8.5" r="1" fill="currentColor"/>
+    </svg>
+    Tallenna PDF:nä
+  </button>
+</div>
+
+<!-- DOCUMENT -->
+<div class="doc">
+
+  <!-- ══ PAGE 1 ════════════════════════════════════════ -->
+  <div class="page page-1">
+
+    <!-- LOGO -->
+    <div class="logo-area">
+      <div class="logo-main">
+        <div class="logo-box">
+          <span class="logo-rn">RN</span>
+        </div>
+        <div class="logo-media-wrap">
+          <span class="logo-media">Media</span>
+          <span class="logo-dot">●</span>
+        </div>
+      </div>
+      <div class="logo-sub">
+        <span class="logo-sub-text">CONTENT STUDIO<br>FINLAND</span>
+        <span class="logo-sub-text" style="text-align:right">SINCE<br>2026</span>
+      </div>
+    </div>
+
+    <hr class="logo-rule">
+    <div class="doc-title">ASIAKASSOPIMUS</div>
+
+    <!-- 1. OSAPUOLET -->
+    <div class="sec">
+      <div class="sec-title">1. Osapuolet</div>
+      <div class="sec-body">
+        <div class="field-row">
+          <span class="field-label">Sopimuksen päivämäärä:</span>
+          <span class="f w-md" contenteditable="true" data-ph="pp.kk.vvvv"></span>
+        </div>
+        <div class="field-row">
+          <span class="field-label">Palveluntarjoaja:</span>
+          <span>RN Media | Nikolas Ruotsalo</span>
+        </div>
+        <div class="field-row">
+          <span class="field-label">Yhteystiedot:</span>
+          <span>nikolas.ruotsalo@rnmedia.fi | +358 40 933 9995</span>
+        </div>
+        <div class="field-row">
+          <span class="field-label">Asiakkaan nimi:</span>
+          <span class="f w-lg" contenteditable="true" data-ph="Etunimi Sukunimi"></span>
+        </div>
+        <div class="field-row">
+          <span class="field-label">Asiakkaan Yritys:</span>
+          <span class="f w-lg" contenteditable="true" data-ph="Yritys Oy"></span>
+        </div>
+        <div class="field-row">
+          <span class="field-label">Asiakkaan sähköposti:</span>
+          <span class="f w-lg" contenteditable="true" data-ph="email@yritys.fi"></span>
+        </div>
+        <div class="field-row">
+          <span class="field-label">Asiakkaan puhelinnumero:</span>
+          <span class="f w-md" contenteditable="true" data-ph="+358 ..."></span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 2. PALVELUJEN LAAJUUS -->
+    <div class="sec">
+      <div class="sec-title">2. Palvelujen laajuus</div>
+      <div class="sec-body">
+        <p style="margin-bottom:5px;">Palveluntarjoaja sitoutuu toimittamaan seuraavat palvelut alla valitun mukaisesti.</p>
+        <table class="pkg-table">
+          <thead>
+            <tr>
+              <th class="pkg-check"></th>
+              <th>Paketti</th>
+              <th>Sisältö</th>
+              <th>Tiedot / Huomautukset</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="pkg-check"><input type="checkbox" id="pkg1"></td>
+              <td>
+                <label for="pkg1" style="cursor:pointer">
+                  <div class="pkg-name">STARTER</div>
+                  <div class="pkg-price">€299/kk</div>
+                </label>
+              </td>
+              <td class="pkg-desc">4 lyhytvideota, 1 kuvaussessio/kk,<br>peruseditointi, 1 korjauskierros</td>
+              <td class="pkg-notes-cell"><input class="pkg-notes" type="text" placeholder="Lisätiedot..."></td>
+            </tr>
+            <tr>
+              <td class="pkg-check"><input type="checkbox" id="pkg2"></td>
+              <td>
+                <label for="pkg2" style="cursor:pointer">
+                  <div class="pkg-name">GROWTH</div>
+                  <div class="pkg-price">€499/kk</div>
+                </label>
+              </td>
+              <td class="pkg-desc">~10 lyhytvideota, 2 kuvaussessiota/kk,<br>strategia + kuukausiraportti</td>
+              <td class="pkg-notes-cell"><input class="pkg-notes" type="text" placeholder="Lisätiedot..."></td>
+            </tr>
+            <tr>
+              <td class="pkg-check"><input type="checkbox" id="pkg3"></td>
+              <td>
+                <label for="pkg3" style="cursor:pointer">
+                  <div class="pkg-name">PREMIUM</div>
+                  <div class="pkg-price">€799/kk</div>
+                </label>
+              </td>
+              <td class="pkg-desc">Jatkuvat shootit, brändistrategia,<br>kampanjasuunnittelu, prioriteettituki</td>
+              <td class="pkg-notes-cell"><input class="pkg-notes" type="text" placeholder="Lisätiedot..."></td>
+            </tr>
+            <tr>
+              <td class="pkg-check"><input type="checkbox" id="pkg4"></td>
+              <td>
+                <label for="pkg4" style="cursor:pointer">
+                  <div class="pkg-name">KERTATILAUS</div>
+                  <div class="pkg-price">€99–€349</div>
+                </label>
+              </td>
+              <td class="pkg-desc">Kertaluonteinen projekti<br>(tarkenna alla)</td>
+              <td class="pkg-notes-cell"><input class="pkg-notes" type="text" placeholder="Tarkenna projekti..."></td>
+            </tr>
+          </tbody>
+        </table>
+        <p class="note">Tarkat toimitukset, määrät ja aikataulut määritellään projektikohtaisessa briefissä tai kuukausisopimuksen liitteessä.</p>
+      </div>
+    </div>
+
+    <!-- 3. VOIMASSAOLO JA KESTO -->
+    <div class="sec">
+      <div class="sec-title">3. Voimassaolo ja kesto</div>
+      <div class="sec-body">
+        <div class="type-row" style="margin-bottom:5px;">
+          <span class="field-label" style="font-size:10px; font-weight:600; margin-right:4px;">Sopimustyyppi:</span>
+          <label><input type="radio" name="soptype" value="kerta"> Kertaluonteinen projekti</label>
+          <label><input type="radio" name="soptype" value="kk"> Kuukausipohjainen palvelu</label>
+        </div>
+        <div class="field-row">
+          <span class="field-label">Aloituspäivämäärä:</span>
+          <span class="f w-md" contenteditable="true" data-ph="pp.kk.vvvv"></span>
+        </div>
+        <div class="field-row">
+          <span class="field-label">Päättymispäivä / Arviointipäivä:</span>
+          <span class="f w-md" contenteditable="true" data-ph="pp.kk.vvvv"></span>
+        </div>
+        <p class="note" style="margin-top:4px;"><em>Kuukausisopimuksissa irtisanomisaika on 30 päivää kirjallisesti. Projektisopimukset päättyvät, kun työ on toimitettu ja maksu vastaanotettu.</em></p>
+      </div>
+    </div>
+
+    <!-- 4. MAKSUT JA MAKSAMINEN -->
+    <div class="sec">
+      <div class="sec-title">4. Maksut ja maksaminen</div>
+      <div class="sec-body">
+        <table class="pay-table">
+          <thead>
+            <tr>
+              <th>Maksutyyppi</th>
+              <th style="width:160px;">Määrä (euroa)</th>
+              <th>Eräpäivä</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Ennakkomaksu (50 % etukäteen)</td>
+              <td><input class="pay-input" type="text" placeholder="€"></td>
+              <td>Allekirjoittaessa</td>
+            </tr>
+            <tr>
+              <td>Loppu-/kuukausimaksu</td>
+              <td><input class="pay-input" type="text" placeholder="€"></td>
+              <td>Ennen toimitusta / kuukauden ensimmäisenä päivänä</td>
+            </tr>
+            <tr>
+              <td>Kiirelisä (rush fee)</td>
+              <td><input class="pay-input" type="text" placeholder="€"></td>
+              <td>Ennen työn aloittamista</td>
+            </tr>
+            <tr>
+              <td>Lisämuutokset</td>
+              <td><input class="pay-input" type="text" placeholder="€"></td>
+              <td>Laskutuksen mukaan</td>
+            </tr>
+          </tbody>
+        </table>
+        <p class="note"><em>Maksutapa: tilisiirto. Laskut erääntyvät 7 päivän kuluessa niiden lähettämisestä. Myöhässä maksetuista maksuista peritään 1,5&nbsp;%:n kuukausikorko. Työ keskeytetään automaattisesti maksujen viivästyessä.</em></p>
+      </div>
+    </div>
+
+    <div class="page-footer">
+      <span>RN Media &nbsp;·&nbsp; Luottamuksellinen</span>
+      <span>nikolas.ruotsalo@rnmedia.fi &nbsp;·&nbsp; rnmedia.fi &nbsp;·&nbsp; Y-tunnus: 3481521-6</span>
+      <span>Sivu 1/2</span>
+    </div>
+  </div><!-- /page-1 -->
+
+  <!-- ══ PAGE 2 ════════════════════════════════════════ -->
+  <div class="page page-2">
+
+    <!-- 5. TARKISTUKSET JA HYVÄKSYNTÄ -->
+    <div class="sec">
+      <div class="sec-title">5. Tarkistukset ja hyväksyntä</div>
+      <div class="sec-body">
+        <div class="subsec">
+          <div class="subsec-title">5.1. Sisällytetyt muutokset</div>
+          <p>Jokainen toimitus sisältää enintään kaksi (2) tarkistuskierrosta. Lisätarkistuksista laskutetaan sovitun tuntihinnan tai pyyntöhetkellä määritellyn kiinteän hinnan mukaisesti.</p>
+        </div>
+        <div class="subsec">
+          <div class="subsec-title">5.2. Hyväksymisprosessi</div>
+          <p>Asiakkaan tulee antaa palaute 5 arkipäivän sisällä toimituksesta. Tämän jälkeen työ katsotaan hyväksytyksi.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- 6. IMMATERIAALIOIKEUDET -->
+    <div class="sec">
+      <div class="sec-title">6. Immateriaalioikeudet ja käyttöoikeudet</div>
+      <div class="sec-body">
+        <div class="subsec">
+          <div class="subsec-title">6.1. Omistusoikeus täyden maksun jälkeen</div>
+          <p>Kaikista lopullisista toimituksista tulee asiakkaan yksinomaista omaisuutta, kun maksu on vastaanotettu kokonaisuudessaan. Siihen asti kaikki oikeudet pysyvät RN Medialla.</p>
+        </div>
+        <div class="subsec">
+          <div class="subsec-title">6.2. Salkkuoikeudet</div>
+          <p>RN Media pidättää oikeuden näyttää valmiita töitä portfoliossaan ja markkinointimateriaaleissaan, ellei Asiakas pyydä luottamuksellisuutta kirjallisesti 14 päivän kuluessa lopullisesta toimituksesta.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- 7. LUOTTAMUKSELLISUUS -->
+    <div class="sec">
+      <div class="sec-title">7. Luottamuksellisuus</div>
+      <div class="sec-body">
+        <p>Molemmat osapuolet sitoutuvat pitämään kaikki projektitiedot, hinnoittelun, strategiat ja liiketoimintatiedot luottamuksellisina. Tämä velvoite on voimassa kaksi (2) vuotta sopimuksen päättymisen jälkeen.</p>
+      </div>
+    </div>
+
+    <!-- 8. PERUUTUS JA HYVITYKSET -->
+    <div class="sec">
+      <div class="sec-title">8. Peruutus ja hyvitykset</div>
+      <div class="sec-body">
+        <div class="subsec">
+          <div class="subsec-title">8.1. Asiakkaan peruutus</div>
+          <p>Jos asiakas peruuttaa työn jo aloitettua, ennakkomaksua ei palauteta. Ennakkomaksun ylittävästä työstä laskutetaan.</p>
+        </div>
+        <div class="subsec">
+          <div class="subsec-title">8.2. Palveluntarjoajan peruutus</div>
+          <p>Jos RN Media ei pysty täyttämään sopimusta, käyttämättömistä ennakkoon maksetuista maksuista palautetaan suhteellinen osuus 14 päivän kuluessa.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- 9. VASTUUNRAJOITUS -->
+    <div class="sec">
+      <div class="sec-title">9. Vastuunrajoitus</div>
+      <div class="sec-body">
+        <p>RN Media ei ole vastuussa toimitettujen materiaalien käytöstä aiheutuvista epäsuorista, satunnaisista tai välillisistä vahingoista. Kokonaisvastuu on rajoitettu tämän sopimuksen nojalla maksettujen palkkioiden kokonaismäärään.</p>
+      </div>
+    </div>
+
+    <!-- 10. SOVELLETTAVA LAKI -->
+    <div class="sec">
+      <div class="sec-title">10. Sovellettava laki</div>
+      <div class="sec-body">
+        <p>Tähän sopimukseen sovelletaan Suomen lakia. Mahdolliset riidat ratkaistaan Lohjan alueen tuomioistuimissa, ellei kirjallisesti toisin sovita.</p>
+      </div>
+    </div>
+
+    <!-- 11. ALLEKIRJOITUKSET -->
+    <div class="sec">
+      <div class="sec-title">11. Allekirjoitukset</div>
+      <div class="sec-body">
+        <p>Allekirjoittamalla alla molemmat osapuolet vahvistavat lukeneensa, ymmärtäneensä ja hyväksyneensä kaikki tämän sopimuksen ehdot.</p>
+        <div class="sig-grid">
+          <div class="sig-col">
+            <div class="sig-line"></div>
+            <div class="sig-name-label">RN Media — Nikolas Ruotsalo</div>
+            <div class="sig-row">
+              <span class="field-label">Nimi:</span>
+              <span class="f w-md" contenteditable="true" data-ph="Nikolas Ruotsalo"></span>
+            </div>
+            <div class="sig-row">
+              <span class="field-label">Päivämäärä:</span>
+              <span class="f w-md" contenteditable="true" data-ph="pp.kk.vvvv"></span>
+            </div>
+          </div>
+          <div class="sig-col">
+            <div class="sig-line"></div>
+            <div class="sig-name-label">Asiakas</div>
+            <div class="sig-row">
+              <span class="field-label">Nimi:</span>
+              <span class="f w-md" contenteditable="true" data-ph=""></span>
+            </div>
+            <div class="sig-row">
+              <span class="field-label">Päivämäärä:</span>
+              <span class="f w-md" contenteditable="true" data-ph="pp.kk.vvvv"></span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- LIITE A -->
+    <hr class="liite-rule">
+    <div class="liite-title">LIITE A — HANKKEEN / KUUKAUSITTAISEN LAAJUUS</div>
+    <p class="liite-sub">Täytä tämä osio jokaiselle projektille tai sopimuskaudelle erikseen. Liitä tarvittaessa lisäarkkeja.</p>
+
+    <div class="liite-fields">
+      <div class="liite-field">
+        <div class="liite-label">Projektin / jakson nimi:</div>
+        <input class="liite-input" type="text" placeholder="">
+      </div>
+      <div class="liite-field">
+        <div class="liite-label">Määräaika:</div>
+        <input class="liite-input" type="text" placeholder="">
+      </div>
+      <div class="liite-field">
+        <div class="liite-label">Kokonaismaksu (euroa):</div>
+        <input class="liite-input" type="text" placeholder="">
+      </div>
+      <div class="liite-field">
+        <div class="liite-label">Alustat / kanavat:</div>
+        <input class="liite-input" type="text" placeholder="">
+      </div>
+      <div class="liite-field full">
+        <div class="liite-label">Toimitettavat tuotteet (luettelo):</div>
+        <textarea class="liite-textarea" rows="3" placeholder=""></textarea>
+      </div>
+      <div class="liite-field full">
+        <div class="liite-label">Erityishuomautuksia:</div>
+        <textarea class="liite-textarea" rows="3" placeholder=""></textarea>
+      </div>
+    </div>
+
+    <div class="page-footer" style="margin-top:auto;">
+      <span>RN Media &nbsp;·&nbsp; Luottamuksellinen</span>
+      <span>nikolas.ruotsalo@rnmedia.fi &nbsp;·&nbsp; rnmedia.fi &nbsp;·&nbsp; Y-tunnus: 3481521-6</span>
+      <span>Sivu 2/2</span>
+    </div>
+  </div><!-- /page-2 -->
+
+</div><!-- /doc -->
+
+<script>
+  // Show placeholder text for contenteditable fields
+  document.querySelectorAll('[contenteditable][data-ph]').forEach(el => {
+    const ph = el.dataset.ph;
+    if (ph && !el.textContent.trim()) {
+      el.style.color = '#aaa';
+      el.textContent = ph;
+    }
+    el.addEventListener('focus', () => {
+      if (el.textContent === el.dataset.ph) {
+        el.textContent = '';
+        el.style.color = '#000';
+      }
+    });
+    el.addEventListener('blur', () => {
+      if (!el.textContent.trim()) {
+        el.textContent = el.dataset.ph || '';
+        el.style.color = '#aaa';
+      }
+    });
+  });
+</script>
+</body>
+</html>
