@@ -1,0 +1,974 @@
+<!DOCTYPE html>
+<html lang="fi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>RN Media – Dashboard</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg:       #0e0e0e;
+      --surface:  #161616;
+      --surface2: #1c1c1c;
+      --surface3: #222222;
+      --border:   #242424;
+      --border2:  #303030;
+      --text:     #efefef;
+      --muted:    #808080;
+      --muted2:   #444444;
+      --white:    #ffffff;
+      --green:    #22c55e;
+      --green-bg: #071910;
+      --green-b:  #14532d;
+      --yellow:   #eab308;
+      --yellow-bg:#171200;
+      --yellow-b: #713f12;
+      --red:      #ef4444;
+      --red-bg:   #140404;
+      --red-b:    #7f1d1d;
+      --r:        10px;
+      --r-sm:     6px;
+      --r-xs:     4px;
+    }
+
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      -webkit-font-smoothing: antialiased;
+      min-height: 100vh;
+    }
+
+    /* ── LAYOUT ──────────────────────────────────────── */
+    .wrap {
+      max-width: 1080px;
+      margin: 0 auto;
+      padding: 48px 32px 96px;
+    }
+
+    /* ── TOP BAR ─────────────────────────────────────── */
+    .topbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 48px;
+    }
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .brand-name {
+      font-family: 'Anton', sans-serif;
+      font-size: 22px;
+      letter-spacing: 0.05em;
+      color: var(--white);
+    }
+    .brand-sep { width: 1px; height: 15px; background: var(--border2); }
+    .brand-sub {
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+    .add-btn {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--white);
+      color: #111;
+      font-family: 'Inter', sans-serif;
+      font-size: 13px;
+      font-weight: 600;
+      padding: 10px 20px;
+      border: none;
+      border-radius: var(--r-sm);
+      cursor: pointer;
+      transition: background 0.15s, transform 0.1s;
+    }
+    .add-btn:hover { background: #e8e8e8; }
+    .add-btn:active { transform: scale(0.97); }
+
+    /* ── STATS ROW ───────────────────────────────────── */
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+      margin-bottom: 40px;
+    }
+    .stat {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--r);
+      padding: 20px 22px;
+    }
+    .stat-label {
+      font-size: 9px;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 10px;
+    }
+    .stat-value {
+      font-family: 'Anton', sans-serif;
+      font-size: 36px;
+      line-height: 1;
+      color: var(--white);
+    }
+    .stat-value.revenue { color: var(--green); }
+    .stat-sub {
+      font-size: 11px;
+      color: var(--muted);
+      margin-top: 4px;
+    }
+    .stat.alert-stat { border-color: var(--yellow-b); background: var(--yellow-bg); }
+    .stat.alert-stat .stat-value { color: var(--yellow); }
+    .stat.overdue-stat { border-color: var(--red-b); background: var(--red-bg); }
+    .stat.overdue-stat .stat-value { color: var(--red); }
+
+    /* ── FILTERS ─────────────────────────────────────── */
+    .filters {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 24px;
+      flex-wrap: wrap;
+    }
+    .filter-label {
+      font-size: 11px;
+      font-weight: 500;
+      color: var(--muted);
+      margin-right: 4px;
+    }
+    .filter-btn {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.05em;
+      padding: 6px 14px;
+      border-radius: 100px;
+      border: 1px solid var(--border2);
+      background: transparent;
+      color: var(--muted);
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .filter-btn:hover { color: var(--text); border-color: #444; }
+    .filter-btn.active { background: var(--white); color: #111; border-color: var(--white); }
+    .sort-sep { width: 1px; height: 18px; background: var(--border); margin: 0 4px; }
+    .sort-select {
+      background: transparent;
+      border: 1px solid var(--border2);
+      border-radius: var(--r-xs);
+      color: var(--muted);
+      font-family: 'Inter', sans-serif;
+      font-size: 11px;
+      font-weight: 500;
+      padding: 6px 10px;
+      cursor: pointer;
+      outline: none;
+      appearance: none;
+      -webkit-appearance: none;
+      padding-right: 24px;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%23666' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 8px center;
+    }
+    .sort-select option { background: #1c1c1c; color: var(--text); }
+
+    /* ── CLIENT GRID ─────────────────────────────────── */
+    .client-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+    }
+
+    .client-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--r);
+      padding: 22px 22px 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      position: relative;
+      transition: border-color 0.2s;
+      cursor: default;
+    }
+    .client-card:hover { border-color: var(--border2); }
+    .client-card.status-green { border-left: 3px solid var(--green); }
+    .client-card.status-yellow { border-left: 3px solid var(--yellow); }
+    .client-card.status-red { border-left: 3px solid var(--red); }
+
+    .card-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 10px;
+    }
+    .client-name {
+      font-family: 'Anton', sans-serif;
+      font-size: 20px;
+      letter-spacing: 0.02em;
+      color: var(--white);
+      line-height: 1.15;
+      word-break: break-word;
+    }
+    .status-dot {
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+      flex-shrink: 0;
+      margin-top: 5px;
+    }
+    .status-dot.green { background: var(--green); box-shadow: 0 0 6px var(--green); }
+    .status-dot.yellow { background: var(--yellow); box-shadow: 0 0 6px var(--yellow); }
+    .status-dot.red { background: var(--red); box-shadow: 0 0 6px var(--red); }
+
+    .card-mid {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .card-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 7px 10px;
+      background: var(--surface2);
+      border-radius: var(--r-xs);
+    }
+    .card-row-label {
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+    .card-row-value {
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--text);
+    }
+    .card-row-value.revenue {
+      font-family: 'Anton', sans-serif;
+      font-size: 16px;
+      color: var(--white);
+    }
+    .card-row-value.due-yellow { color: var(--yellow); font-weight: 600; }
+    .card-row-value.due-red { color: var(--red); font-weight: 600; }
+    .card-row-value.due-green { color: var(--green); }
+
+    .package-chip {
+      display: inline-block;
+      font-size: 9px;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 3px 8px;
+      border-radius: 100px;
+      border: 1px solid var(--border2);
+      color: var(--muted);
+      background: var(--surface3);
+    }
+    .package-chip.starter { color: #a3a3a3; }
+    .package-chip.growth { color: #60a5fa; border-color: #1e3a5f; background: #0a1929; }
+    .package-chip.pro { color: #c084fc; border-color: #4a1d7a; background: #150d26; }
+    .package-chip.elite { color: #fbbf24; border-color: #713f12; background: #1c1000; }
+
+    .card-actions {
+      display: flex;
+      gap: 8px;
+      border-top: 1px solid var(--border);
+      padding-top: 14px;
+      margin-top: 2px;
+    }
+    .card-act-btn {
+      flex: 1;
+      font-family: 'Inter', sans-serif;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      padding: 8px;
+      border-radius: var(--r-sm);
+      border: 1px solid var(--border2);
+      background: var(--surface2);
+      color: var(--muted);
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .card-act-btn:hover { color: var(--text); border-color: #444; }
+    .card-act-btn.del:hover { color: var(--red); border-color: var(--red-b); background: var(--red-bg); }
+
+    /* ── EMPTY STATE ─────────────────────────────────── */
+    .empty-state {
+      grid-column: 1 / -1;
+      text-align: center;
+      padding: 80px 20px;
+      color: var(--muted2);
+    }
+    .empty-state svg { margin-bottom: 16px; opacity: 0.3; }
+    .empty-state-title {
+      font-size: 15px;
+      font-weight: 500;
+      color: var(--muted);
+      margin-bottom: 8px;
+    }
+    .empty-state-sub { font-size: 13px; font-weight: 300; line-height: 1.6; }
+
+    /* ── MODAL ───────────────────────────────────────── */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.75);
+      backdrop-filter: blur(4px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 500;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.2s, visibility 0.2s;
+      padding: 20px;
+    }
+    .modal-overlay.open { opacity: 1; visibility: visible; }
+
+    .modal {
+      background: var(--surface);
+      border: 1px solid var(--border2);
+      border-radius: 14px;
+      width: 100%;
+      max-width: 480px;
+      max-height: 90vh;
+      overflow-y: auto;
+      transform: translateY(12px);
+      transition: transform 0.2s;
+    }
+    .modal-overlay.open .modal { transform: translateY(0); }
+
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 24px 28px 0;
+      margin-bottom: 24px;
+    }
+    .modal-title {
+      font-family: 'Anton', sans-serif;
+      font-size: 22px;
+      letter-spacing: 0.02em;
+      color: var(--white);
+    }
+    .modal-close {
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      color: var(--muted);
+      font-size: 16px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.15s;
+      line-height: 1;
+    }
+    .modal-close:hover { color: var(--white); background: var(--surface3); }
+
+    .modal-body { padding: 0 28px 28px; }
+
+    .field {
+      display: flex;
+      flex-direction: column;
+      gap: 7px;
+      margin-bottom: 16px;
+    }
+    .field:last-of-type { margin-bottom: 0; }
+    .field-label {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+    .field-input,
+    .field-select {
+      background: var(--surface2);
+      border: 1px solid var(--border2);
+      border-radius: var(--r-sm);
+      color: var(--text);
+      font-family: 'Inter', sans-serif;
+      font-size: 13px;
+      padding: 11px 14px;
+      outline: none;
+      transition: border-color 0.15s;
+      width: 100%;
+    }
+    .field-input:focus,
+    .field-select:focus { border-color: #555; }
+    .field-input::placeholder { color: var(--muted2); }
+    .field-select { cursor: pointer; appearance: none; -webkit-appearance: none; }
+    .field-select option { background: #1c1c1c; }
+
+    .field-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+    }
+
+    .modal-actions {
+      display: flex;
+      gap: 10px;
+      margin-top: 24px;
+      padding-top: 20px;
+      border-top: 1px solid var(--border);
+    }
+    .modal-cancel {
+      flex: 1;
+      font-family: 'Inter', sans-serif;
+      font-size: 13px;
+      font-weight: 500;
+      padding: 11px;
+      border: 1px solid var(--border2);
+      border-radius: var(--r-sm);
+      background: transparent;
+      color: var(--muted);
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .modal-cancel:hover { color: var(--text); border-color: #444; }
+    .modal-save {
+      flex: 2;
+      font-family: 'Inter', sans-serif;
+      font-size: 13px;
+      font-weight: 600;
+      padding: 11px;
+      border: none;
+      border-radius: var(--r-sm);
+      background: var(--white);
+      color: #111;
+      cursor: pointer;
+      transition: background 0.15s, transform 0.1s;
+    }
+    .modal-save:hover { background: #e8e8e8; }
+    .modal-save:active { transform: scale(0.98); }
+
+    /* ── DELETE CONFIRM ──────────────────────────────── */
+    .confirm-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.8);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 600;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.15s, visibility 0.15s;
+    }
+    .confirm-overlay.open { opacity: 1; visibility: visible; }
+    .confirm-box {
+      background: var(--surface);
+      border: 1px solid var(--red-b);
+      border-radius: var(--r);
+      padding: 28px 32px;
+      max-width: 340px;
+      text-align: center;
+    }
+    .confirm-title {
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--white);
+      margin-bottom: 8px;
+    }
+    .confirm-sub {
+      font-size: 13px;
+      color: var(--muted);
+      font-weight: 300;
+      line-height: 1.6;
+      margin-bottom: 24px;
+    }
+    .confirm-btns { display: flex; gap: 10px; }
+    .confirm-cancel {
+      flex: 1;
+      padding: 10px;
+      border: 1px solid var(--border2);
+      border-radius: var(--r-sm);
+      background: transparent;
+      color: var(--muted);
+      font-family: 'Inter', sans-serif;
+      font-size: 13px;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .confirm-cancel:hover { color: var(--text); }
+    .confirm-delete {
+      flex: 1;
+      padding: 10px;
+      border: none;
+      border-radius: var(--r-sm);
+      background: var(--red);
+      color: var(--white);
+      font-family: 'Inter', sans-serif;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: opacity 0.15s;
+    }
+    .confirm-delete:hover { opacity: 0.85; }
+
+    /* ── TOAST ───────────────────────────────────────── */
+    .toast {
+      position: fixed;
+      bottom: 28px;
+      left: 50%;
+      transform: translateX(-50%) translateY(12px);
+      background: var(--surface2);
+      border: 1px solid var(--border2);
+      border-radius: var(--r-sm);
+      padding: 10px 20px;
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--text);
+      white-space: nowrap;
+      opacity: 0;
+      transition: opacity 0.2s, transform 0.2s;
+      z-index: 700;
+      pointer-events: none;
+    }
+    .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+    /* ── RESPONSIVE ──────────────────────────────────── */
+    @media (max-width: 860px) {
+      .stats { grid-template-columns: repeat(2, 1fr); }
+      .client-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 540px) {
+      .wrap { padding: 28px 16px 60px; }
+      .stats { grid-template-columns: repeat(2, 1fr); }
+      .client-grid { grid-template-columns: 1fr; }
+      .field-grid { grid-template-columns: 1fr; }
+      .topbar { flex-direction: column; align-items: flex-start; gap: 16px; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="wrap">
+
+  <!-- TOP BAR -->
+  <div class="topbar">
+    <div class="brand">
+      <span class="brand-name">RN MEDIA</span>
+      <div class="brand-sep"></div>
+      <span class="brand-sub">Client Dashboard</span>
+    </div>
+    <button class="add-btn" onclick="openModal()">
+      <svg width="13" height="13" viewBox="0 0 13 13" fill="none">
+        <path d="M6.5 1v11M1 6.5h11" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+      </svg>
+      Lisää asiakas
+    </button>
+  </div>
+
+  <!-- STATS -->
+  <div class="stats">
+    <div class="stat">
+      <div class="stat-label">Kuukausitulot</div>
+      <div class="stat-value revenue" id="stat-revenue">0 €</div>
+      <div class="stat-sub" id="stat-clients">0 asiakasta</div>
+    </div>
+    <div class="stat" id="stat-active-wrap">
+      <div class="stat-label">Aktiiviset</div>
+      <div class="stat-value" id="stat-active">0</div>
+      <div class="stat-sub">asiakasta</div>
+    </div>
+    <div class="stat" id="stat-alert-wrap">
+      <div class="stat-label">Sisältö pian</div>
+      <div class="stat-value" id="stat-alert">0</div>
+      <div class="stat-sub">alle 3 pv</div>
+    </div>
+    <div class="stat" id="stat-overdue-wrap">
+      <div class="stat-label">Myöhässä</div>
+      <div class="stat-value" id="stat-overdue">0</div>
+      <div class="stat-sub">asiakasta</div>
+    </div>
+  </div>
+
+  <!-- FILTERS -->
+  <div class="filters">
+    <span class="filter-label">Näytä:</span>
+    <button class="filter-btn active" data-filter="all" onclick="setFilter(this)">Kaikki</button>
+    <button class="filter-btn" data-filter="green" onclick="setFilter(this)">✓ Aikataulussa</button>
+    <button class="filter-btn" data-filter="yellow" onclick="setFilter(this)">⚡ Pian</button>
+    <button class="filter-btn" data-filter="red" onclick="setFilter(this)">⚠ Myöhässä</button>
+    <div class="sort-sep"></div>
+    <select class="sort-select" id="sort-select" onchange="render()">
+      <option value="name">Nimi A–Z</option>
+      <option value="revenue-desc">Hinta ↓</option>
+      <option value="revenue-asc">Hinta ↑</option>
+      <option value="due">Deadline</option>
+      <option value="invoice">Lasku</option>
+    </select>
+  </div>
+
+  <!-- CLIENT GRID -->
+  <div class="client-grid" id="client-grid"></div>
+
+</div><!-- /wrap -->
+
+<!-- ADD / EDIT MODAL -->
+<div class="modal-overlay" id="modal" onclick="overlayClick(event)">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title" id="modal-title">Lisää asiakas</div>
+      <button class="modal-close" onclick="closeModal()">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="field">
+        <label class="field-label" for="f-name">Yrityksen nimi</label>
+        <input class="field-input" type="text" id="f-name" placeholder="Acme Oy">
+      </div>
+      <div class="field-grid">
+        <div class="field">
+          <label class="field-label" for="f-package">Paketti</label>
+          <select class="field-select" id="f-package">
+            <option value="Starter">Starter</option>
+            <option value="Growth">Growth</option>
+            <option value="Pro">Pro</option>
+            <option value="Elite">Elite</option>
+          </select>
+        </div>
+        <div class="field">
+          <label class="field-label" for="f-rate">Kuukausihinta (€)</label>
+          <input class="field-input" type="number" id="f-rate" placeholder="299" min="0">
+        </div>
+      </div>
+      <div class="field-grid">
+        <div class="field">
+          <label class="field-label" for="f-start">Aloituspäivä</label>
+          <input class="field-input" type="date" id="f-start">
+        </div>
+        <div class="field">
+          <label class="field-label" for="f-invoice">Seuraava lasku</label>
+          <input class="field-input" type="date" id="f-invoice">
+        </div>
+      </div>
+      <div class="field">
+        <label class="field-label" for="f-due">Sisällön deadline</label>
+        <input class="field-input" type="date" id="f-due">
+      </div>
+      <div class="modal-actions">
+        <button class="modal-cancel" onclick="closeModal()">Peruuta</button>
+        <button class="modal-save" id="modal-save-btn" onclick="saveClient()">Tallenna</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- DELETE CONFIRM -->
+<div class="confirm-overlay" id="confirm">
+  <div class="confirm-box">
+    <div class="confirm-title">Poista asiakas?</div>
+    <div class="confirm-sub" id="confirm-name">Tätä toimintoa ei voi peruuttaa.</div>
+    <div class="confirm-btns">
+      <button class="confirm-cancel" onclick="closeConfirm()">Peruuta</button>
+      <button class="confirm-delete" onclick="doDelete()">Poista</button>
+    </div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<script>
+  // ── STORAGE ───────────────────────────────────────────
+  const STORE_KEY = 'rnmedia_clients';
+
+  function load() {
+    try { return JSON.parse(localStorage.getItem(STORE_KEY)) || []; }
+    catch { return []; }
+  }
+  function save(data) {
+    localStorage.setItem(STORE_KEY, JSON.stringify(data));
+  }
+
+  let clients = load();
+  let editingId = null;
+  let deletingId = null;
+  let activeFilter = 'all';
+
+  // ── UTILS ─────────────────────────────────────────────
+  function uid() {
+    return Date.now().toString(36) + Math.random().toString(36).slice(2, 6);
+  }
+
+  function today() {
+    return new Date().toISOString().slice(0, 10);
+  }
+
+  function diffDays(dateStr) {
+    const now = new Date(); now.setHours(0,0,0,0);
+    const d = new Date(dateStr); d.setHours(0,0,0,0);
+    return Math.round((d - now) / 86400000);
+  }
+
+  function fmtDate(dateStr) {
+    if (!dateStr) return '—';
+    const [y, m, d] = dateStr.split('-');
+    return `${d}.${m}.${y}`;
+  }
+
+  function fmtEur(n) {
+    return Number(n).toLocaleString('fi-FI') + ' €';
+  }
+
+  function getStatus(dueDate) {
+    if (!dueDate) return 'green';
+    const diff = diffDays(dueDate);
+    if (diff < 0) return 'red';
+    if (diff <= 3) return 'yellow';
+    return 'green';
+  }
+
+  function statusLabel(dueDate) {
+    if (!dueDate) return { text: '—', cls: '' };
+    const diff = diffDays(dueDate);
+    if (diff < 0) return { text: `${Math.abs(diff)} pv myöhässä`, cls: 'due-red' };
+    if (diff === 0) return { text: 'Tänään!', cls: 'due-yellow' };
+    if (diff <= 3) return { text: `${diff} pv jäljellä`, cls: 'due-yellow' };
+    return { text: fmtDate(dueDate), cls: 'due-green' };
+  }
+
+  function packageClass(pkg) {
+    return { Starter: 'starter', Growth: 'growth', Pro: 'pro', Elite: 'elite' }[pkg] || 'starter';
+  }
+
+  // ── TOAST ─────────────────────────────────────────────
+  let toastTimer;
+  function showToast(msg) {
+    const t = document.getElementById('toast');
+    t.textContent = msg;
+    t.classList.add('show');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => t.classList.remove('show'), 2200);
+  }
+
+  // ── FILTER ───────────────────────────────────────────
+  function setFilter(btn) {
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    activeFilter = btn.dataset.filter;
+    render();
+  }
+
+  // ── RENDER ───────────────────────────────────────────
+  function render() {
+    const sort = document.getElementById('sort-select').value;
+
+    let list = [...clients];
+
+    // filter
+    if (activeFilter !== 'all') {
+      list = list.filter(c => getStatus(c.due) === activeFilter);
+    }
+
+    // sort
+    list.sort((a, b) => {
+      if (sort === 'name') return a.name.localeCompare(b.name, 'fi');
+      if (sort === 'revenue-desc') return Number(b.rate) - Number(a.rate);
+      if (sort === 'revenue-asc') return Number(a.rate) - Number(b.rate);
+      if (sort === 'due') return (a.due || '9999').localeCompare(b.due || '9999');
+      if (sort === 'invoice') return (a.invoice || '9999').localeCompare(b.invoice || '9999');
+      return 0;
+    });
+
+    const grid = document.getElementById('client-grid');
+    grid.innerHTML = '';
+
+    if (list.length === 0) {
+      grid.innerHTML = `
+        <div class="empty-state">
+          <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2">
+            <path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/>
+            <circle cx="9" cy="7" r="4"/>
+            <path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/>
+          </svg>
+          <div class="empty-state-title">${activeFilter === 'all' ? 'Ei asiakkaita vielä' : 'Ei tuloksia'}</div>
+          <div class="empty-state-sub">${activeFilter === 'all' ? 'Lisää ensimmäinen asiakas klikkaamalla "Lisää asiakas".' : 'Ei asiakkaita tässä kategoriassa.'}</div>
+        </div>`;
+    }
+
+    list.forEach(c => {
+      const st = getStatus(c.due);
+      const sl = statusLabel(c.due);
+      const card = document.createElement('div');
+      card.className = `client-card status-${st}`;
+      card.innerHTML = `
+        <div class="card-top">
+          <div class="client-name">${esc(c.name)}</div>
+          <div class="status-dot ${st}"></div>
+        </div>
+        <div class="card-mid">
+          <div class="card-row">
+            <span class="card-row-label">Paketti</span>
+            <span class="package-chip ${packageClass(c.package)}">${esc(c.package)}</span>
+          </div>
+          <div class="card-row">
+            <span class="card-row-label">Kuukausihinta</span>
+            <span class="card-row-value revenue">${fmtEur(c.rate)}</span>
+          </div>
+          <div class="card-row">
+            <span class="card-row-label">Aloitettu</span>
+            <span class="card-row-value">${fmtDate(c.start)}</span>
+          </div>
+          <div class="card-row">
+            <span class="card-row-label">Seuraava lasku</span>
+            <span class="card-row-value">${fmtDate(c.invoice)}</span>
+          </div>
+          <div class="card-row">
+            <span class="card-row-label">Sisältö deadline</span>
+            <span class="card-row-value ${sl.cls}">${sl.text}</span>
+          </div>
+        </div>
+        <div class="card-actions">
+          <button class="card-act-btn" onclick="openEdit('${c.id}')">Muokkaa</button>
+          <button class="card-act-btn del" onclick="openConfirm('${c.id}')">Poista</button>
+        </div>`;
+      grid.appendChild(card);
+    });
+
+    updateStats();
+  }
+
+  function esc(s) {
+    return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  }
+
+  function updateStats() {
+    const total = clients.reduce((s, c) => s + Number(c.rate || 0), 0);
+    const alertCount = clients.filter(c => getStatus(c.due) === 'yellow').length;
+    const overdueCount = clients.filter(c => getStatus(c.due) === 'red').length;
+
+    document.getElementById('stat-revenue').textContent = fmtEur(total);
+    document.getElementById('stat-clients').textContent = clients.length + ' asiakasta';
+    document.getElementById('stat-active').textContent = clients.length;
+    document.getElementById('stat-alert').textContent = alertCount;
+    document.getElementById('stat-overdue').textContent = overdueCount;
+
+    const alertWrap = document.getElementById('stat-alert-wrap');
+    const overdueWrap = document.getElementById('stat-overdue-wrap');
+
+    alertWrap.className = 'stat' + (alertCount > 0 ? ' alert-stat' : '');
+    overdueWrap.className = 'stat' + (overdueCount > 0 ? ' overdue-stat' : '');
+  }
+
+  // ── MODAL ─────────────────────────────────────────────
+  function openModal() {
+    editingId = null;
+    document.getElementById('modal-title').textContent = 'Lisää asiakas';
+    document.getElementById('modal-save-btn').textContent = 'Lisää asiakas';
+    document.getElementById('f-name').value = '';
+    document.getElementById('f-package').value = 'Starter';
+    document.getElementById('f-rate').value = '';
+    document.getElementById('f-start').value = today();
+    document.getElementById('f-invoice').value = '';
+    document.getElementById('f-due').value = '';
+    document.getElementById('modal').classList.add('open');
+    setTimeout(() => document.getElementById('f-name').focus(), 200);
+  }
+
+  function openEdit(id) {
+    const c = clients.find(x => x.id === id);
+    if (!c) return;
+    editingId = id;
+    document.getElementById('modal-title').textContent = 'Muokkaa asiakasta';
+    document.getElementById('modal-save-btn').textContent = 'Tallenna muutokset';
+    document.getElementById('f-name').value = c.name;
+    document.getElementById('f-package').value = c.package;
+    document.getElementById('f-rate').value = c.rate;
+    document.getElementById('f-start').value = c.start || '';
+    document.getElementById('f-invoice').value = c.invoice || '';
+    document.getElementById('f-due').value = c.due || '';
+    document.getElementById('modal').classList.add('open');
+    setTimeout(() => document.getElementById('f-name').focus(), 200);
+  }
+
+  function closeModal() {
+    document.getElementById('modal').classList.remove('open');
+  }
+
+  function overlayClick(e) {
+    if (e.target === document.getElementById('modal')) closeModal();
+  }
+
+  function saveClient() {
+    const name = document.getElementById('f-name').value.trim();
+    if (!name) { document.getElementById('f-name').focus(); return; }
+
+    const data = {
+      name,
+      package: document.getElementById('f-package').value,
+      rate: document.getElementById('f-rate').value || 0,
+      start: document.getElementById('f-start').value,
+      invoice: document.getElementById('f-invoice').value,
+      due: document.getElementById('f-due').value,
+    };
+
+    if (editingId) {
+      const idx = clients.findIndex(x => x.id === editingId);
+      if (idx !== -1) clients[idx] = { ...clients[idx], ...data };
+      showToast('Muutokset tallennettu');
+    } else {
+      clients.push({ id: uid(), ...data });
+      showToast('Asiakas lisätty');
+    }
+
+    save(clients);
+    closeModal();
+    render();
+  }
+
+  // ── DELETE ────────────────────────────────────────────
+  function openConfirm(id) {
+    deletingId = id;
+    const c = clients.find(x => x.id === id);
+    document.getElementById('confirm-name').textContent =
+      `"${c ? c.name : ''}" poistetaan pysyvästi.`;
+    document.getElementById('confirm').classList.add('open');
+  }
+
+  function closeConfirm() {
+    document.getElementById('confirm').classList.remove('open');
+    deletingId = null;
+  }
+
+  function doDelete() {
+    clients = clients.filter(x => x.id !== deletingId);
+    save(clients);
+    closeConfirm();
+    render();
+    showToast('Asiakas poistettu');
+  }
+
+  // Escape key
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape') {
+      closeModal();
+      closeConfirm();
+    }
+    if ((e.key === 'Enter') && document.getElementById('modal').classList.contains('open')) {
+      if (document.activeElement.tagName !== 'BUTTON') saveClient();
+    }
+  });
+
+  // ── INIT ──────────────────────────────────────────────
+  render();
+</script>
+</body>
+</html>
