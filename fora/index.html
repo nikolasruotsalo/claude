@@ -1,51 +1,51 @@
 <!DOCTYPE html>
 <html lang="fi">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Förå Oy — RN Media Asiakasportaali</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400;500&family=Playfair+Display:wght@400;600&display=swap" rel="stylesheet" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Förå Oy – Asiakasportaali</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400;500&family=Playfair+Display:wght@400;600&display=swap" rel="stylesheet">
 
   <script>
     // ============================================================
-    //  PIN — change this single value to update the access code
+    //  PIN — change this value to update the access code (6 digits)
     // ============================================================
-    const ACCESS_PIN = "12345678";
+    const ACCESS_PIN = "123456";
 
     // ============================================================
-    //  ✏️  EDIT HERE — update this object each month
+    //  ✏️  EDIT HERE — update this object each month.
     //  No other code needs to be touched.
     // ============================================================
     const CLIENT_DATA = {
-      clientName: "Förå Oy",
-      package: "Custom €75 (125) /kk",
+      clientName:               "Förå Oy",
+      package:                  "Custom €75 (125) /kk",
 
-      nextShootDate: "",          // e.g. "15.6.2025"
+      nextShootDate:            "",       // e.g. "15.6.2025"
       videosDeliveredThisMonth: 0,
-      videosTotal: 4,
-      postsScheduled: 0,
-      postsTotal: 4,
-      nextReportDate: "",         // e.g. "30.6.2025"
-      reportStatus: "Tulossa",    // "Tulossa" | "Valmis" | "Lähetetty"
+      videosTotal:              4,
+      postsScheduled:           0,
+      postsTotal:               4,
+      nextReportDate:           "",       // e.g. "30.6.2025"
+      reportStatus:             "Tulossa",// "Tulossa" | "Valmis" | "Lähetetty"
 
-      // Leave empty string to hide the monthly note box entirely
-      monthlyNote: "",
+      // Leave empty to hide the note box
+      monthlyNote:              "",
 
-      // Formspree form ID for feedback emails
-      formspreeId: "https://formspree.io/f/mdajqwqr,
+      // Formspree form ID
+      formspreeId:              "mdajqwqr",
 
       contentItems: [
-        // Example card — duplicate/edit as needed:
+        // Duplicate / edit blocks below.
         // {
-        //   id: "video-1",
-        //   platform: "TikTok",           // "TikTok" | "Instagram" | "Reels"
-        //   type: "video",                // "video" | "image"
-        //   embedUrl: "",                 // direct mp4/YouTube/Vimeo embed URL, or leave ""
-        //   thumbnailUrl: "",             // fallback thumbnail image URL
+        //   id: "v1",
+        //   platform: "TikTok",          // "TikTok" | "Instagram" | "Reels"
+        //   type: "video",               // "video" | "image"
+        //   embedUrl: "",                // YouTube / Vimeo URL or direct .mp4, or ""
+        //   thumbnailUrl: "",            // fallback image, or ""
         //   caption: "Kuvateksti tähän.",
-        //   status: "Odottaa",            // "Odottaa" | "Hyväksytty" | "Muutoksia pyydetty"
+        //   status: "Odottaa",           // "Odottaa" | "Hyväksytty" | "Muutoksia pyydetty"
         // },
       ],
     };
@@ -55,940 +55,774 @@
   </script>
 
   <style>
-    /* ── Reset & base ─────────────────────────────────────────── */
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
     :root {
-      --bg:        #0a0a0a;
-      --surface:   #141414;
-      --surface2:  #1c1c1c;
-      --border:    #2a2a2a;
-      --accent:    #e8e0d0;
-      --accent-dim:#b8b0a0;
-      --green:     #2d5a3d;
-      --green-light:#4caf7d;
-      --red:       #5a2d2d;
-      --red-light: #cf6679;
-      --text:      #f0ede8;
-      --text-muted:#888;
-      --font-mono: 'DM Mono', monospace;
-      --font-serif:'Playfair Display', serif;
-      --radius:    8px;
-      --transition: 0.25s ease;
+      --bg:           #111111;
+      --surface:      #181818;
+      --surface2:     #1d1d1d;
+      --border:       #262626;
+      --border2:      #333333;
+      --text:         #f0f0f0;
+      --muted:        #888888;
+      --muted2:       #4a4a4a;
+      --white:        #ffffff;
+      --accent:       #e8e0d0;
+      --accent-dim:   #b8b0a0;
+      --green:        #22c55e;
+      --green-bg:     #052512;
+      --green-border: #166534;
+      --red:          #ef4444;
+      --red-bg:       #2a0707;
+      --red-border:   #991b1b;
+      --r:            10px;
+      --r-sm:         6px;
+      --mono:         'DM Mono', monospace;
+      --serif:        'Playfair Display', serif;
     }
 
-    html, body {
-      min-height: 100vh;
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: var(--mono);
       background: var(--bg);
       color: var(--text);
-      font-family: var(--font-mono);
-      font-size: 15px;
-      line-height: 1.6;
       -webkit-font-smoothing: antialiased;
+      min-height: 100vh;
     }
 
-    /* ── Animations ───────────────────────────────────────────── */
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(12px); }
-      to   { opacity: 1; transform: translateY(0); }
-    }
-    @keyframes pinShake {
-      0%,100% { transform: translateX(0); }
-      20%,60% { transform: translateX(-8px); }
-      40%,80% { transform: translateX(8px); }
-    }
-    .fade-in  { animation: fadeIn 0.5s ease both; }
-    .fade-in-2{ animation: fadeIn 0.5s 0.1s ease both; }
-    .fade-in-3{ animation: fadeIn 0.5s 0.2s ease both; }
-    .fade-in-4{ animation: fadeIn 0.5s 0.3s ease both; }
-
-    /* ── PIN SCREEN ───────────────────────────────────────────── */
+    /* ── PIN SCREEN ──────────────────────────────────────── */
     #pin-screen {
+      position: fixed;
+      inset: 0;
+      background: var(--bg);
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      min-height: 100vh;
-      padding: 2rem;
-      animation: fadeIn 0.4s ease;
+      z-index: 1000;
+      transition: opacity 0.4s ease, visibility 0.4s ease;
     }
-    #pin-screen .logo-text {
-      font-family: var(--font-mono);
-      font-size: 0.75rem;
+    #pin-screen.hidden {
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+    }
+
+    .pin-logo-wrap {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 48px;
+    }
+    .pin-brand-name {
+      font-family: var(--mono);
+      font-size: 13px;
       font-weight: 500;
-      letter-spacing: 0.18em;
+      letter-spacing: 0.22em;
       text-transform: uppercase;
       color: var(--accent);
-      margin-bottom: 3rem;
-      opacity: 0.9;
     }
-    #pin-screen h1 {
-      font-family: var(--font-serif);
-      font-size: 1.5rem;
+    .pin-sep { width: 1px; height: 14px; background: var(--border2); }
+    .pin-subtitle {
+      font-size: 11px;
       font-weight: 400;
-      color: var(--text);
-      margin-bottom: 0.4rem;
-      text-align: center;
-    }
-    #pin-screen p.sub {
-      font-size: 0.78rem;
-      color: var(--text-muted);
-      letter-spacing: 0.06em;
-      margin-bottom: 2.4rem;
-      text-align: center;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--muted);
     }
 
-    /* PIN dots */
-    #pin-dots {
+    .pin-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 40px 36px 36px;
+      width: 320px;
+      text-align: center;
+    }
+    .pin-title {
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 24px;
+    }
+
+    @keyframes pinShake {
+      0%,100% { transform: translateX(0); }
+      20%,60%  { transform: translateX(-7px); }
+      40%,80%  { transform: translateX(7px); }
+    }
+
+    .pin-dots {
       display: flex;
+      justify-content: center;
       gap: 10px;
-      margin-bottom: 2rem;
+      margin-bottom: 32px;
     }
     .pin-dot {
-      width: 12px;
-      height: 12px;
+      width: 13px; height: 13px;
       border-radius: 50%;
-      border: 1.5px solid var(--accent-dim);
+      border: 2px solid var(--border2);
       background: transparent;
-      transition: background var(--transition), border-color var(--transition);
+      transition: background 0.15s, border-color 0.15s;
     }
-    .pin-dot.filled {
-      background: var(--accent);
-      border-color: var(--accent);
-    }
-    .pin-dot.error {
-      border-color: var(--red-light);
-      background: var(--red-light);
-    }
+    .pin-dot.filled { background: var(--accent); border-color: var(--accent); }
+    .pin-dot.error  { background: var(--red);    border-color: var(--red); }
 
-    /* Numpad */
-    #numpad {
+    .pin-pad {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
       gap: 10px;
-      width: 100%;
-      max-width: 280px;
     }
-    .num-btn {
-      background: var(--surface);
+    .pin-btn {
+      background: var(--surface2);
       border: 1px solid var(--border);
-      color: var(--text);
-      font-family: var(--font-mono);
-      font-size: 1.3rem;
+      border-radius: var(--r-sm);
+      color: var(--white);
+      font-family: var(--mono);
+      font-size: 20px;
       font-weight: 400;
-      padding: 1.1rem 0;
-      border-radius: var(--radius);
+      height: 58px;
       cursor: pointer;
-      transition: background var(--transition), border-color var(--transition), transform 0.1s;
-      user-select: none;
+      transition: background 0.1s, transform 0.08s;
+      display: flex; align-items: center; justify-content: center;
     }
-    .num-btn:hover  { background: var(--surface2); border-color: var(--accent-dim); }
-    .num-btn:active { transform: scale(0.94); }
-    .num-btn.wide   { grid-column: span 2; font-size: 0.8rem; letter-spacing: 0.1em; }
-    .num-btn.del    { font-size: 1rem; color: var(--text-muted); }
+    .pin-btn:hover  { background: #252525; }
+    .pin-btn:active { transform: scale(0.95); background: #2e2e2e; }
+    .pin-btn.del    { font-size: 18px; color: var(--muted); }
+    .pin-btn.empty  { pointer-events: none; background: transparent; border-color: transparent; }
 
-    #pin-error {
-      margin-top: 1.2rem;
-      font-size: 0.75rem;
-      color: var(--red-light);
-      letter-spacing: 0.08em;
-      min-height: 1.2em;
-      text-align: center;
+    .pin-error {
+      margin-top: 18px;
+      font-size: 11px;
+      letter-spacing: 0.06em;
+      color: var(--red);
+      min-height: 18px;
     }
 
-    /* ── DASHBOARD ────────────────────────────────────────────── */
-    #dashboard {
-      display: none;
-      min-height: 100vh;
-      padding-bottom: 3rem;
-    }
-    #dashboard.visible { display: block; animation: fadeIn 0.5s ease; }
+    /* ── PORTAL ──────────────────────────────────────────── */
+    #portal { display: none; max-width: 960px; margin: 0 auto; padding: 56px 40px 80px; }
+    #portal.visible { display: block; }
 
-    /* Header */
-    .site-header {
+    /* ── TOP BAR ─────────────────────────────────────────── */
+    .topbar {
       display: flex;
-      align-items: center;
       justify-content: space-between;
-      padding: 1.4rem 2rem;
-      border-bottom: 1px solid var(--border);
-      position: sticky;
-      top: 0;
-      background: var(--bg);
-      z-index: 100;
-      gap: 1rem;
+      align-items: center;
+      margin-bottom: 48px;
     }
-    .header-logo {
-      font-family: var(--font-mono);
-      font-size: 0.7rem;
-      font-weight: 500;
-      letter-spacing: 0.2em;
-      text-transform: uppercase;
+    .topbar-brand { display: flex; align-items: center; gap: 12px; }
+    .topbar-name {
+      font-family: var(--mono);
+      font-size: 13px; font-weight: 500;
+      letter-spacing: 0.22em; text-transform: uppercase;
       color: var(--accent);
     }
-    .header-center {
-      text-align: center;
-      flex: 1;
+    .topbar-sep { width: 1px; height: 14px; background: var(--border2); }
+    .topbar-client {
+      font-family: var(--serif);
+      font-size: 18px; font-weight: 400;
+      color: var(--white);
     }
-    .header-client {
-      font-family: var(--font-serif);
-      font-size: 1.15rem;
-      font-weight: 400;
-      color: var(--text);
+    .topbar-month {
+      font-size: 10px; letter-spacing: 0.1em;
+      text-transform: uppercase; color: var(--muted); margin-top: 1px;
     }
-    .header-month {
-      font-size: 0.68rem;
-      color: var(--text-muted);
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      margin-top: 1px;
-    }
-    .header-right {
-      display: flex;
-      align-items: center;
-      gap: 0.8rem;
-    }
+    .topbar-right { display: flex; align-items: center; gap: 10px; }
     .pkg-badge {
-      font-size: 0.65rem;
-      letter-spacing: 0.1em;
+      font-size: 10px; letter-spacing: 0.08em;
       color: var(--accent-dim);
-      border: 1px solid var(--border);
-      border-radius: 4px;
-      padding: 0.25rem 0.55rem;
-      white-space: nowrap;
+      border: 1px solid var(--border2);
+      border-radius: 4px; padding: 4px 10px; white-space: nowrap;
     }
     .logout-btn {
-      background: transparent;
+      font-family: var(--mono);
+      font-size: 10px; font-weight: 500;
+      letter-spacing: 0.1em; text-transform: uppercase;
+      color: var(--muted2); background: none;
       border: 1px solid var(--border);
-      color: var(--text-muted);
-      font-family: var(--font-mono);
-      font-size: 0.65rem;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      padding: 0.3rem 0.7rem;
-      border-radius: var(--radius);
-      cursor: pointer;
-      transition: border-color var(--transition), color var(--transition);
+      border-radius: var(--r-sm); padding: 7px 14px;
+      cursor: pointer; transition: color 0.15s, border-color 0.15s;
     }
-    .logout-btn:hover { border-color: var(--accent-dim); color: var(--text); }
+    .logout-btn:hover { color: var(--muted); border-color: var(--border2); }
 
-    /* Main container */
-    .main {
-      max-width: 1100px;
-      margin: 0 auto;
-      padding: 2rem 1.5rem;
+    /* ── SECTION ─────────────────────────────────────────── */
+    .section { margin-bottom: 56px; }
+    .section-header { display: flex; align-items: baseline; gap: 14px; margin-bottom: 24px; }
+    .section-label {
+      font-size: 10px; font-weight: 500;
+      letter-spacing: 0.16em; text-transform: uppercase;
+      color: var(--muted); white-space: nowrap;
     }
+    .section-rule { flex: 1; height: 1px; background: var(--border); }
 
-    /* Stats row */
-    .stats-row {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 1rem;
-      margin-bottom: 2rem;
-    }
-    @media (max-width: 720px) {
-      .stats-row { grid-template-columns: repeat(2, 1fr); }
-    }
-    @media (max-width: 420px) {
-      .stats-row { grid-template-columns: 1fr; }
-    }
-
+    /* ── STATS ROW ───────────────────────────────────────── */
+    .stats-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
     .stat-card {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      padding: 1.2rem 1.1rem 1rem;
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: var(--r); padding: 20px 18px 16px;
     }
     .stat-label {
-      font-size: 0.65rem;
-      letter-spacing: 0.14em;
-      text-transform: uppercase;
-      color: var(--text-muted);
-      margin-bottom: 0.5rem;
+      font-size: 9px; font-weight: 500;
+      letter-spacing: 0.14em; text-transform: uppercase;
+      color: var(--muted); margin-bottom: 10px;
     }
-    .stat-value {
-      font-size: 1.6rem;
-      font-weight: 500;
-      color: var(--accent);
-      line-height: 1;
-      margin-bottom: 0.2rem;
-    }
-    .stat-sub {
-      font-size: 0.7rem;
-      color: var(--text-muted);
-      margin-bottom: 0.7rem;
-    }
-    .progress-bar {
-      height: 2px;
-      background: var(--border);
-      border-radius: 1px;
-      overflow: hidden;
-    }
-    .progress-fill {
-      height: 100%;
-      background: var(--accent);
-      border-radius: 1px;
-      transition: width 0.8s ease;
-    }
-    .stat-text {
-      font-size: 0.88rem;
-      color: var(--text);
-      margin-top: 0.1rem;
-    }
+    .stat-value { font-size: 1.5rem; font-weight: 500; color: var(--accent); line-height: 1; margin-bottom: 4px; }
+    .stat-value .denom { font-size: 0.95rem; color: var(--muted); }
+    .stat-sub  { font-size: 10px; color: var(--muted); margin-bottom: 10px; }
+    .stat-text { font-size: 14px; color: var(--white); margin-bottom: 4px; }
+    .progress-bar  { height: 2px; background: var(--border2); border-radius: 1px; overflow: hidden; }
+    .progress-fill { height: 100%; background: var(--accent); border-radius: 1px; transition: width 0.8s ease; }
     .stat-pill {
-      display: inline-block;
-      font-size: 0.68rem;
-      padding: 0.15rem 0.5rem;
-      border-radius: 20px;
-      letter-spacing: 0.06em;
-      margin-top: 0.35rem;
+      display: inline-block; font-size: 9px; font-weight: 500;
+      letter-spacing: 0.08em; padding: 3px 8px; border-radius: 20px; margin-top: 6px;
     }
-    .pill-coming  { background: #1e2a1e; color: var(--green-light); }
-    .pill-ready   { background: #1e2632; color: #6faed9; }
-    .pill-sent    { background: #2a2218; color: #d4a843; }
+    .pill-coming { background: #1a2a1a; color: var(--green); border: 1px solid var(--green-border); }
+    .pill-ready  { background: #1a2030; color: #6faed9;      border: 1px solid #2a4060; }
+    .pill-sent   { background: #2a2010; color: #d4a843;      border: 1px solid #4a3820; }
 
-    /* Monthly note */
+    /* ── MONTHLY NOTE ────────────────────────────────────── */
     #monthly-note-box {
+      display: none;
       background: #161410;
       border: 1px solid #3a3020;
       border-left: 3px solid var(--accent);
-      border-radius: var(--radius);
-      padding: 1rem 1.2rem;
-      margin-bottom: 2rem;
-      font-size: 0.88rem;
-      color: var(--accent);
-      display: none;
+      border-radius: var(--r);
+      padding: 16px 20px;
+      margin-bottom: 48px;
     }
-    #monthly-note-box .note-label {
-      font-size: 0.62rem;
-      letter-spacing: 0.16em;
-      text-transform: uppercase;
-      color: var(--accent-dim);
-      margin-bottom: 0.4rem;
+    .note-label {
+      font-size: 9px; font-weight: 500;
+      letter-spacing: 0.16em; text-transform: uppercase;
+      color: var(--accent-dim); margin-bottom: 6px;
     }
+    #monthly-note-text { font-size: 13px; color: var(--accent); line-height: 1.65; }
 
-    /* Section title */
-    .section-title {
-      font-size: 0.65rem;
-      letter-spacing: 0.2em;
-      text-transform: uppercase;
-      color: var(--text-muted);
-      margin-bottom: 1rem;
-      padding-bottom: 0.5rem;
-      border-bottom: 1px solid var(--border);
-    }
-
-    /* Content grid */
-    #content-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-      gap: 1.2rem;
-    }
+    /* ── CONTENT GRID ────────────────────────────────────── */
+    .content-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
     .content-empty {
-      grid-column: 1 / -1;
-      text-align: center;
-      padding: 3rem;
-      color: var(--text-muted);
-      font-size: 0.8rem;
-      letter-spacing: 0.1em;
-      border: 1px dashed var(--border);
-      border-radius: var(--radius);
+      grid-column: 1 / -1; text-align: center; padding: 48px;
+      color: var(--muted); font-size: 11px; letter-spacing: 0.1em;
+      border: 1px dashed var(--border); border-radius: var(--r);
     }
 
-    /* Content card */
     .content-card {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      overflow: hidden;
-      transition: border-color var(--transition);
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: var(--r); overflow: hidden;
+      display: flex; flex-direction: column;
+      transition: border-color 0.2s, background 0.2s;
     }
-    .content-card.approved  { border-color: var(--green-light); }
-    .content-card.changes   { border-color: var(--red-light); }
+    .content-card.approved { border-color: var(--green-border); background: #0a1a0f; }
+    .content-card.changes  { border-color: var(--red-border);   background: #1a0a0a; }
 
     .card-media {
-      position: relative;
-      width: 100%;
-      aspect-ratio: 16/9;
-      background: #111;
-      overflow: hidden;
+      width: 100%; aspect-ratio: 9/16;
+      background: var(--surface2); position: relative; overflow: hidden;
     }
-    .card-media iframe,
-    .card-media video {
-      width: 100%;
-      height: 100%;
-      border: none;
-      display: block;
+    .card-media iframe, .card-media video { width: 100%; height: 100%; border: none; display: block; }
+    .card-media img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .card-placeholder {
+      width: 100%; height: 100%;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      gap: 10px; color: var(--muted2);
     }
-    .card-media img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      display: block;
-    }
-    .media-placeholder {
-      width: 100%;
-      height: 100%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: var(--border);
-      font-size: 0.7rem;
-      letter-spacing: 0.1em;
-      flex-direction: column;
-      gap: 0.5rem;
-    }
-    .media-placeholder svg { opacity: 0.3; }
+    .card-placeholder svg { opacity: 0.4; }
+    .card-placeholder-text { font-size: 10px; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; }
 
-    .card-body {
-      padding: 1rem;
-    }
-    .card-badges {
-      display: flex;
-      gap: 0.5rem;
-      align-items: center;
-      margin-bottom: 0.7rem;
-      flex-wrap: wrap;
-    }
-    .platform-badge {
-      font-size: 0.6rem;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      padding: 0.2rem 0.5rem;
-      border-radius: 3px;
-      font-weight: 500;
-    }
-    .platform-tiktok    { background: #1a1a2e; color: #69c9d0; border: 1px solid #2a2a4e; }
-    .platform-instagram { background: #2a1a2e; color: #c77dff; border: 1px solid #4e2a5a; }
-    .platform-reels     { background: #2a1a18; color: #ff9a9e; border: 1px solid #5a2a28; }
+    .card-body { padding: 16px 18px; flex: 1; display: flex; flex-direction: column; gap: 12px; }
+    .card-meta { display: flex; align-items: center; justify-content: space-between; gap: 8px; flex-wrap: wrap; }
 
-    .status-badge {
-      font-size: 0.6rem;
-      letter-spacing: 0.1em;
-      padding: 0.2rem 0.5rem;
-      border-radius: 3px;
+    .platform-tag {
+      font-size: 9px; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase;
+      padding: 3px 9px; border-radius: 100px;
+      border: 1px solid var(--border2); background: var(--surface2); color: var(--text);
     }
-    .status-waiting  { background: #1e1e1e; color: var(--text-muted); border: 1px solid var(--border); }
-    .status-approved { background: var(--green);  color: var(--green-light); border: 1px solid #3d7a52; }
-    .status-changes  { background: var(--red);    color: var(--red-light);   border: 1px solid #7a3d45; }
+    .platform-tag.tiktok    { border-color: #2a2a2a; color: #f0f0f0; }
+    .platform-tag.instagram { border-color: #3a2040; color: #d4a0e0; background: #1e1228; }
+    .platform-tag.reels     { border-color: #3a2020; color: #ffb0b0; background: #1e1010; }
 
-    .card-caption {
-      font-size: 0.82rem;
-      color: var(--text-muted);
-      line-height: 1.55;
-      margin-bottom: 0.9rem;
+    .status-tag {
+      font-size: 9px; font-weight: 500; letter-spacing: 0.06em;
+      padding: 3px 8px; border-radius: 100px;
     }
-    .card-approved-message {
-      display: none;
-      font-size: 0.75rem;
-      color: var(--green-light);
-      letter-spacing: 0.06em;
-      text-align: center;
-      padding: 0.5rem 0;
-    }
-    .card-actions {
-      display: flex;
-      gap: 0.6rem;
-    }
-    .btn {
-      flex: 1;
-      padding: 0.6rem 0.5rem;
-      border-radius: var(--radius);
-      border: 1px solid var(--border);
-      font-family: var(--font-mono);
-      font-size: 0.68rem;
-      letter-spacing: 0.08em;
-      cursor: pointer;
-      transition: background var(--transition), border-color var(--transition), color var(--transition);
-    }
-    .btn-approve {
-      background: transparent;
-      color: var(--green-light);
-      border-color: var(--green);
-    }
-    .btn-approve:hover { background: var(--green); }
-    .btn-changes {
-      background: transparent;
-      color: var(--red-light);
-      border-color: var(--red);
-    }
-    .btn-changes:hover { background: var(--red); }
+    .status-waiting  { background: #1e1e1e;      color: var(--muted); border: 1px solid var(--border2); }
+    .status-approved { background: var(--green-bg); color: var(--green); border: 1px solid var(--green-border); }
+    .status-changes  { background: var(--red-bg);   color: var(--red);   border: 1px solid var(--red-border); }
 
-    .feedback-area {
-      display: none;
-      margin-top: 0.8rem;
+    .card-caption { font-size: 12px; font-weight: 300; line-height: 1.65; color: var(--muted); }
+
+    .card-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: auto; }
+    .action-btn {
+      font-family: var(--mono);
+      font-size: 10px; font-weight: 500; letter-spacing: 0.06em;
+      padding: 9px 8px; border-radius: var(--r-sm);
+      border: 1px solid var(--border2); cursor: pointer; transition: all 0.15s;
+      background: var(--surface2); color: var(--muted);
+      display: flex; align-items: center; justify-content: center; gap: 5px;
     }
-    .feedback-area textarea {
-      width: 100%;
-      background: var(--surface2);
-      border: 1px solid var(--border);
-      color: var(--text);
-      font-family: var(--font-mono);
-      font-size: 0.78rem;
-      padding: 0.7rem;
-      border-radius: var(--radius);
-      resize: vertical;
-      min-height: 80px;
-      outline: none;
-      line-height: 1.5;
+    .action-btn.approve { color: var(--green); border-color: var(--green-border); background: var(--green-bg); }
+    .action-btn.approve:hover, .action-btn.approve.active { background: #0a2e18; border-color: var(--green); }
+    .action-btn.request { color: var(--red); border-color: var(--red-border); background: var(--red-bg); }
+    .action-btn.request:hover, .action-btn.request.active { background: #2e0a0a; border-color: var(--red); }
+
+    .feedback-box { display: none; flex-direction: column; gap: 8px; padding-top: 4px; }
+    .feedback-box.open { display: flex; }
+    .feedback-textarea {
+      background: var(--surface2); border: 1px solid var(--red-border);
+      border-radius: var(--r-sm); color: var(--text);
+      font-family: var(--mono); font-size: 12px;
+      padding: 10px 12px; outline: none; resize: none; min-height: 72px; line-height: 1.5;
+      transition: border-color 0.15s;
     }
-    .feedback-area textarea:focus { border-color: var(--accent-dim); }
-    .btn-submit {
-      margin-top: 0.5rem;
-      width: 100%;
-      background: var(--accent);
-      color: var(--bg);
-      border: none;
-      font-family: var(--font-mono);
-      font-size: 0.68rem;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      padding: 0.6rem;
-      border-radius: var(--radius);
-      cursor: pointer;
-      transition: opacity var(--transition);
+    .feedback-textarea:focus { border-color: var(--red); }
+    .feedback-textarea::placeholder { color: var(--muted2); }
+    .feedback-send-btn {
+      font-family: var(--mono); font-size: 10px; font-weight: 500;
+      letter-spacing: 0.1em; text-transform: uppercase;
+      background: var(--accent); color: #111;
+      border: none; border-radius: var(--r-sm);
+      padding: 9px; cursor: pointer; transition: opacity 0.15s;
     }
-    .btn-submit:hover { opacity: 0.85; }
-    .feedback-sent {
-      display: none;
-      font-size: 0.72rem;
-      color: var(--green-light);
-      text-align: center;
-      padding: 0.4rem;
-      margin-top: 0.5rem;
-      letter-spacing: 0.06em;
+    .feedback-send-btn:hover    { opacity: 0.85; }
+    .feedback-send-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+    .feedback-sent { display: none; font-size: 11px; color: var(--green); text-align: center; padding: 4px; letter-spacing: 0.06em; }
+
+    /* ── SUBMIT BAR ──────────────────────────────────────── */
+    .submit-bar {
+      margin-top: 24px; background: var(--surface);
+      border: 1px solid var(--border); border-radius: var(--r);
+      padding: 20px 28px; display: flex;
+      align-items: center; justify-content: space-between; gap: 20px;
+    }
+    .submit-status { font-size: 13px; color: var(--muted); font-weight: 300; }
+    .submit-status strong { color: var(--text); font-weight: 500; }
+    .submit-approval {
+      background: var(--white); color: #111;
+      font-family: var(--mono); font-size: 12px; font-weight: 500; letter-spacing: 0.06em;
+      padding: 12px 28px; border: none; border-radius: var(--r-sm);
+      cursor: pointer; transition: background 0.15s, transform 0.1s; white-space: nowrap;
+    }
+    .submit-approval:hover    { background: #e8e8e8; }
+    .submit-approval:active   { transform: scale(0.98); }
+    .submit-approval:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
+    .approval-success {
+      display: none; padding: 14px 20px;
+      background: var(--green-bg); border: 1px solid var(--green-border);
+      border-radius: var(--r-sm); font-size: 13px; color: var(--green);
+      font-weight: 400; text-align: center;
     }
 
-    /* Footer */
-    .site-footer {
-      text-align: center;
-      padding: 2rem 1rem;
+    /* ── FOOTER ──────────────────────────────────────────── */
+    .portal-footer {
+      margin-top: 80px; padding-top: 24px;
       border-top: 1px solid var(--border);
-      font-size: 0.65rem;
-      color: var(--text-muted);
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      margin-top: 2rem;
+      display: flex; justify-content: space-between; align-items: center;
     }
+    .portal-footer-credit { font-size: 10px; color: var(--muted2); letter-spacing: 0.08em; }
+    .portal-footer-logo   { font-family: var(--mono); font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--muted2); }
 
-    /* Mobile tweaks */
-    @media (max-width: 560px) {
-      .site-header { padding: 1rem; }
-      .header-logo { font-size: 0.6rem; }
-      .pkg-badge   { display: none; }
-      .main        { padding: 1.2rem 1rem; }
+    /* ── RESPONSIVE ──────────────────────────────────────── */
+    @media (max-width: 760px) {
+      #portal { padding: 32px 20px 60px; }
+      .stats-row { grid-template-columns: 1fr 1fr; }
+      .content-grid { grid-template-columns: 1fr 1fr; }
+      .submit-bar { flex-direction: column; align-items: stretch; }
+      .pkg-badge { display: none; }
+    }
+    @media (max-width: 480px) {
+      .content-grid { grid-template-columns: 1fr; }
+      .stats-row { grid-template-columns: 1fr; }
     }
   </style>
 </head>
 <body>
 
-<!-- ═══════════════════════════════════════════════════════════
-     PIN SCREEN
-═══════════════════════════════════════════════════════════ -->
+<!-- ── PIN SCREEN ──────────────────────────────────────────── -->
 <div id="pin-screen">
-  <div class="logo-text">RN Media</div>
-  <h1>Asiakasportaali</h1>
-  <p class="sub">Syötä 8-numeroinen PIN-koodi</p>
-
-  <div id="pin-dots">
-    <div class="pin-dot" id="dot-0"></div>
-    <div class="pin-dot" id="dot-1"></div>
-    <div class="pin-dot" id="dot-2"></div>
-    <div class="pin-dot" id="dot-3"></div>
-    <div class="pin-dot" id="dot-4"></div>
-    <div class="pin-dot" id="dot-5"></div>
-    <div class="pin-dot" id="dot-6"></div>
-    <div class="pin-dot" id="dot-7"></div>
+  <div class="pin-logo-wrap">
+    <span class="pin-brand-name">RN Media</span>
+    <div class="pin-sep"></div>
+    <span class="pin-subtitle">Asiakasportaali</span>
   </div>
-
-  <div id="numpad">
-    <button class="num-btn" onclick="pinPress('1')">1</button>
-    <button class="num-btn" onclick="pinPress('2')">2</button>
-    <button class="num-btn" onclick="pinPress('3')">3</button>
-    <button class="num-btn" onclick="pinPress('4')">4</button>
-    <button class="num-btn" onclick="pinPress('5')">5</button>
-    <button class="num-btn" onclick="pinPress('6')">6</button>
-    <button class="num-btn" onclick="pinPress('7')">7</button>
-    <button class="num-btn" onclick="pinPress('8')">8</button>
-    <button class="num-btn" onclick="pinPress('9')">9</button>
-    <button class="num-btn wide" onclick="pinPress('0')">0</button>
-    <button class="num-btn del" onclick="pinDel()">⌫</button>
+  <div class="pin-card">
+    <div class="pin-title">Syötä 6-numeroinen PIN</div>
+    <div class="pin-dots" id="pin-dots">
+      <div class="pin-dot" id="d0"></div>
+      <div class="pin-dot" id="d1"></div>
+      <div class="pin-dot" id="d2"></div>
+      <div class="pin-dot" id="d3"></div>
+      <div class="pin-dot" id="d4"></div>
+      <div class="pin-dot" id="d5"></div>
+    </div>
+    <div class="pin-pad">
+      <button class="pin-btn" onclick="pinPress('1')">1</button>
+      <button class="pin-btn" onclick="pinPress('2')">2</button>
+      <button class="pin-btn" onclick="pinPress('3')">3</button>
+      <button class="pin-btn" onclick="pinPress('4')">4</button>
+      <button class="pin-btn" onclick="pinPress('5')">5</button>
+      <button class="pin-btn" onclick="pinPress('6')">6</button>
+      <button class="pin-btn" onclick="pinPress('7')">7</button>
+      <button class="pin-btn" onclick="pinPress('8')">8</button>
+      <button class="pin-btn" onclick="pinPress('9')">9</button>
+      <button class="pin-btn empty"></button>
+      <button class="pin-btn" onclick="pinPress('0')">0</button>
+      <button class="pin-btn del" onclick="pinDel()">⌫</button>
+    </div>
+    <div class="pin-error" id="pin-error"></div>
   </div>
-
-  <div id="pin-error"></div>
 </div>
 
-<!-- ═══════════════════════════════════════════════════════════
-     DASHBOARD
-═══════════════════════════════════════════════════════════ -->
-<div id="dashboard">
+<!-- ── PORTAL ──────────────────────────────────────────────── -->
+<div id="portal">
 
-  <header class="site-header">
-    <div class="header-logo">RN Media</div>
-    <div class="header-center">
-      <div class="header-client" id="hdr-client"></div>
-      <div class="header-month" id="hdr-month"></div>
+  <div class="topbar">
+    <div class="topbar-brand">
+      <span class="topbar-name">RN Media</span>
+      <div class="topbar-sep"></div>
+      <div>
+        <div class="topbar-client" id="hdr-client"></div>
+        <div class="topbar-month"  id="hdr-month"></div>
+      </div>
     </div>
-    <div class="header-right">
+    <div class="topbar-right">
       <span class="pkg-badge" id="hdr-pkg"></span>
       <button class="logout-btn" onclick="logout()">Kirjaudu ulos</button>
     </div>
-  </header>
+  </div>
 
-  <main class="main">
-
-    <!-- Stats row -->
-    <div class="stats-row fade-in">
+  <!-- Stats -->
+  <div class="section">
+    <div class="section-header">
+      <span class="section-label">Kuukauden tilanne</span>
+      <div class="section-rule"></div>
+    </div>
+    <div class="stats-row">
       <div class="stat-card">
         <div class="stat-label">Videot toimitettu</div>
-        <div class="stat-value"><span id="stat-vid-num"></span><span style="font-size:1rem;color:var(--text-muted)"> / <span id="stat-vid-tot"></span></span></div>
-        <div class="stat-sub" id="stat-vid-sub"></div>
-        <div class="progress-bar"><div class="progress-fill" id="prog-vid"></div></div>
+        <div class="stat-value"><span id="sv-num"></span><span class="denom"> / <span id="sv-tot"></span></span></div>
+        <div class="stat-sub">tässä kuussa</div>
+        <div class="progress-bar"><div class="progress-fill" id="pv"></div></div>
       </div>
       <div class="stat-card">
-        <div class="stat-label">Postaukset aikataulutettu</div>
-        <div class="stat-value"><span id="stat-post-num"></span><span style="font-size:1rem;color:var(--text-muted)"> / <span id="stat-post-tot"></span></span></div>
-        <div class="stat-sub" id="stat-post-sub"></div>
-        <div class="progress-bar"><div class="progress-fill" id="prog-post"></div></div>
+        <div class="stat-label">Postaukset ajoitettu</div>
+        <div class="stat-value"><span id="sp-num"></span><span class="denom"> / <span id="sp-tot"></span></span></div>
+        <div class="stat-sub">tässä kuussa</div>
+        <div class="progress-bar"><div class="progress-fill" id="pp"></div></div>
       </div>
       <div class="stat-card">
         <div class="stat-label">Seuraava kuvaus</div>
-        <div class="stat-value" style="font-size:1.1rem;padding-top:0.3rem" id="stat-shoot"></div>
-        <div class="stat-sub">Sovittu päivämäärä</div>
+        <div class="stat-text" id="ss-date"></div>
+        <div class="stat-sub">sovittu päivämäärä</div>
       </div>
       <div class="stat-card">
         <div class="stat-label">Raportti</div>
-        <div class="stat-sub" id="stat-report-date" style="margin-top:0.3rem"></div>
-        <div id="stat-report-pill"></div>
+        <div class="stat-sub" id="ss-report-date" style="margin-top:4px"></div>
+        <div id="ss-report-pill"></div>
       </div>
     </div>
+  </div>
 
-    <!-- Monthly note -->
-    <div id="monthly-note-box" class="fade-in-2">
-      <div class="note-label">Viesti Nikolasilta</div>
-      <div id="monthly-note-text"></div>
+  <!-- Monthly note -->
+  <div id="monthly-note-box">
+    <div class="note-label">Viesti Nikolasilta</div>
+    <div id="monthly-note-text"></div>
+  </div>
+
+  <!-- Content approval -->
+  <div class="section">
+    <div class="section-header">
+      <span class="section-label">Sisällön hyväksyntä</span>
+      <div class="section-rule"></div>
     </div>
-
-    <!-- Content approval grid -->
-    <div class="fade-in-3">
-      <div class="section-title">Sisällön hyväksyntä</div>
-      <div id="content-grid"></div>
+    <div class="content-grid" id="content-grid"></div>
+    <div class="submit-bar" id="submit-bar">
+      <div class="submit-status" id="submit-status">
+        Valitse toiminto jokaiselle sisällölle ennen lähettämistä.
+      </div>
+      <button class="submit-approval" id="submit-btn" onclick="submitAll()" disabled>
+        Lähetä hyväksynnät →
+      </button>
     </div>
+    <div class="approval-success" id="approval-success">
+      ✓ &nbsp;Hyväksynnät lähetetty! Käymme ne läpi ja olemme teihin yhteydessä.
+    </div>
+  </div>
 
-  </main>
+  <div class="portal-footer">
+    <div class="portal-footer-credit">© <span id="footer-year"></span> RN Media &nbsp;·&nbsp; rnmedia.fi</div>
+    <div class="portal-footer-logo">RN Media</div>
+  </div>
 
-  <footer class="site-footer">
-    RN Media — Kaikki oikeudet pidätetään &nbsp;·&nbsp; <span id="footer-year"></span>
-  </footer>
 </div>
 
-<!-- ═══════════════════════════════════════════════════════════
-     JAVASCRIPT
-═══════════════════════════════════════════════════════════ -->
 <script>
-  // ── PIN logic ──────────────────────────────────────────────
-  let pinInput = "";
-  const PIN_LENGTH = 8;
+  const PIN_LEN = 6;
+  let pinValue = '';
 
   function pinPress(digit) {
-    if (pinInput.length >= PIN_LENGTH) return;
-    pinInput += digit;
+    if (pinValue.length >= PIN_LEN) return;
+    pinValue += digit;
     updateDots();
-    if (pinInput.length === PIN_LENGTH) checkPin();
+    if (pinValue.length === PIN_LEN) setTimeout(checkPin, 120);
   }
 
   function pinDel() {
-    pinInput = pinInput.slice(0, -1);
+    pinValue = pinValue.slice(0, -1);
     updateDots();
-    clearError();
+    document.getElementById('pin-error').textContent = '';
   }
 
   function updateDots() {
-    for (let i = 0; i < PIN_LENGTH; i++) {
-      const dot = document.getElementById("dot-" + i);
-      dot.classList.toggle("filled", i < pinInput.length);
-      dot.classList.remove("error");
+    for (let i = 0; i < PIN_LEN; i++) {
+      const d = document.getElementById('d' + i);
+      d.classList.toggle('filled', i < pinValue.length);
+      d.classList.remove('error');
     }
   }
 
   function checkPin() {
-    if (pinInput === ACCESS_PIN) {
-      sessionStorage.setItem("fora_auth", "1");
-      showDashboard();
+    if (pinValue === ACCESS_PIN) {
+      sessionStorage.setItem('fora_auth', '1');
+      document.getElementById('pin-screen').classList.add('hidden');
+      populateDashboard();
+      document.getElementById('portal').classList.add('visible');
     } else {
-      showPinError();
+      const dotsEl = document.getElementById('pin-dots');
+      for (let i = 0; i < PIN_LEN; i++) {
+        const d = document.getElementById('d' + i);
+        d.classList.remove('filled');
+        d.classList.add('error');
+      }
+      document.getElementById('pin-error').textContent = 'Väärä PIN-koodi. Yritä uudelleen.';
+      dotsEl.style.animation = 'pinShake 0.4s ease';
+      setTimeout(() => {
+        dotsEl.style.animation = '';
+        for (let i = 0; i < PIN_LEN; i++) document.getElementById('d' + i).classList.remove('error');
+        document.getElementById('pin-error').textContent = '';
+        pinValue = '';
+      }, 900);
     }
   }
 
-  function showPinError() {
-    const dots = document.querySelectorAll(".pin-dot");
-    dots.forEach(d => { d.classList.remove("filled"); d.classList.add("error"); });
-    document.getElementById("pin-error").textContent = "Väärä PIN-koodi. Yritä uudelleen.";
-    document.getElementById("pin-dots").style.animation = "pinShake 0.4s ease";
-    setTimeout(() => {
-      document.getElementById("pin-dots").style.animation = "";
-      dots.forEach(d => d.classList.remove("error"));
-      document.getElementById("pin-error").textContent = "";
-    }, 800);
-    pinInput = "";
-  }
-
-  function clearError() {
-    document.getElementById("pin-error").textContent = "";
-  }
-
-  // Keyboard support
-  document.addEventListener("keydown", e => {
-    if (document.getElementById("pin-screen").style.display === "none") return;
-    if (e.key >= "0" && e.key <= "9") pinPress(e.key);
-    if (e.key === "Backspace") pinDel();
+  document.addEventListener('keydown', e => {
+    if (document.getElementById('pin-screen').classList.contains('hidden')) return;
+    if (e.key >= '0' && e.key <= '9') pinPress(e.key);
+    if (e.key === 'Backspace') pinDel();
   });
 
-  // ── Session & routing ──────────────────────────────────────
   function logout() {
-    sessionStorage.removeItem("fora_auth");
-    document.getElementById("dashboard").classList.remove("visible");
-    document.getElementById("pin-screen").style.display = "flex";
-    pinInput = "";
+    sessionStorage.removeItem('fora_auth');
+    pinValue = '';
     updateDots();
+    document.getElementById('pin-error').textContent = '';
+    document.getElementById('portal').classList.remove('visible');
+    document.getElementById('pin-screen').classList.remove('hidden');
   }
 
-  function showDashboard() {
-    document.getElementById("pin-screen").style.display = "none";
-    populateDashboard();
-    document.getElementById("dashboard").classList.add("visible");
-  }
-
-  // ── Dashboard population ───────────────────────────────────
-  function currentMonthFI() {
-    const months = ["Tammikuu","Helmikuu","Maaliskuu","Huhtikuu","Toukokuu","Kesäkuu",
-                    "Heinäkuu","Elokuu","Syyskuu","Lokakuu","Marraskuu","Joulukuu"];
-    const now = new Date();
-    return months[now.getMonth()] + " " + now.getFullYear();
+  function monthFI() {
+    const m = ["Tammikuu","Helmikuu","Maaliskuu","Huhtikuu","Toukokuu","Kesäkuu",
+               "Heinäkuu","Elokuu","Syyskuu","Lokakuu","Marraskuu","Joulukuu"];
+    const n = new Date();
+    return m[n.getMonth()] + ' ' + n.getFullYear();
   }
 
   function populateDashboard() {
     const d = CLIENT_DATA;
+    document.getElementById('hdr-client').textContent  = d.clientName;
+    document.getElementById('hdr-month').textContent   = monthFI();
+    document.getElementById('hdr-pkg').textContent     = d.package;
+    document.getElementById('footer-year').textContent = new Date().getFullYear();
 
-    // Header
-    document.getElementById("hdr-client").textContent = d.clientName;
-    document.getElementById("hdr-month").textContent  = currentMonthFI();
-    document.getElementById("hdr-pkg").textContent    = d.package;
-    document.getElementById("footer-year").textContent = new Date().getFullYear();
+    document.getElementById('sv-num').textContent = d.videosDeliveredThisMonth;
+    document.getElementById('sv-tot').textContent = d.videosTotal;
+    document.getElementById('pv').style.width = pct(d.videosDeliveredThisMonth, d.videosTotal);
 
-    // Stats — videos
-    document.getElementById("stat-vid-num").textContent  = d.videosDeliveredThisMonth;
-    document.getElementById("stat-vid-tot").textContent  = d.videosTotal;
-    document.getElementById("stat-vid-sub").textContent  = "tässä kuussa";
-    const vidPct = d.videosTotal > 0 ? (d.videosDeliveredThisMonth / d.videosTotal * 100) : 0;
-    document.getElementById("prog-vid").style.width = Math.min(100, vidPct) + "%";
+    document.getElementById('sp-num').textContent = d.postsScheduled;
+    document.getElementById('sp-tot').textContent = d.postsTotal;
+    document.getElementById('pp').style.width = pct(d.postsScheduled, d.postsTotal);
 
-    // Stats — posts
-    document.getElementById("stat-post-num").textContent = d.postsScheduled;
-    document.getElementById("stat-post-tot").textContent = d.postsTotal;
-    document.getElementById("stat-post-sub").textContent = "tässä kuussa";
-    const postPct = d.postsTotal > 0 ? (d.postsScheduled / d.postsTotal * 100) : 0;
-    document.getElementById("prog-post").style.width = Math.min(100, postPct) + "%";
+    document.getElementById('ss-date').textContent = d.nextShootDate || '—';
+    document.getElementById('ss-report-date').textContent = d.nextReportDate ? 'Pvm: ' + d.nextReportDate : '';
 
-    // Stats — shoot date
-    document.getElementById("stat-shoot").textContent = d.nextShootDate || "—";
+    const pillMap = { 'Tulossa': ['pill-coming','Tulossa'], 'Valmis': ['pill-ready','Valmis'], 'Lähetetty': ['pill-sent','Lähetetty'] };
+    const [cls, lbl] = pillMap[d.reportStatus] || ['pill-coming', d.reportStatus];
+    document.getElementById('ss-report-pill').innerHTML = `<span class="stat-pill ${cls}">${lbl}</span>`;
 
-    // Stats — report
-    document.getElementById("stat-report-date").textContent = d.nextReportDate ? "Pvm: " + d.nextReportDate : "";
-    const pillEl = document.getElementById("stat-report-pill");
-    const pillMap = {
-      "Tulossa": ["pill-coming", "Tulossa"],
-      "Valmis":  ["pill-ready",  "Valmis"],
-      "Lähetetty":["pill-sent", "Lähetetty"],
-    };
-    const [cls, label] = pillMap[d.reportStatus] || ["pill-coming", d.reportStatus];
-    pillEl.innerHTML = `<span class="stat-pill ${cls}">${label}</span>`;
-
-    // Monthly note
     if (d.monthlyNote && d.monthlyNote.trim()) {
-      document.getElementById("monthly-note-box").style.display = "block";
-      document.getElementById("monthly-note-text").textContent = d.monthlyNote;
+      document.getElementById('monthly-note-box').style.display = 'block';
+      document.getElementById('monthly-note-text').textContent = d.monthlyNote;
     }
 
-    // Content grid
-    buildContentGrid(d.contentItems || [], d.formspreeId);
+    buildGrid(d.contentItems || [], d.formspreeId);
   }
 
-  function buildContentGrid(items, formspreeId) {
-    const grid = document.getElementById("content-grid");
-    grid.innerHTML = "";
+  function pct(val, total) {
+    return total > 0 ? Math.min(100, val / total * 100) + '%' : '0%';
+  }
 
+  function buildGrid(items, formId) {
+    const grid = document.getElementById('content-grid');
+    grid.innerHTML = '';
     if (!items.length) {
       grid.innerHTML = '<div class="content-empty">Ei sisältöjä tällä hetkellä</div>';
+      document.getElementById('submit-bar').style.display = 'none';
       return;
     }
-
     items.forEach(item => {
-      const card = document.createElement("div");
-      card.className = "content-card";
-      card.id = "card-" + item.id;
+      const st = item.status || 'Odottaa';
+      const card = document.createElement('div');
+      card.className = 'content-card' + (st === 'Hyväksytty' ? ' approved' : st === 'Muutoksia pyydetty' ? ' changes' : '');
+      card.dataset.id = item.id;
 
-      const initStatus = item.status || "Odottaa";
-      if (initStatus === "Hyväksytty")           card.classList.add("approved");
-      else if (initStatus === "Muutoksia pyydetty") card.classList.add("changes");
+      const platClass = { TikTok: 'tiktok', Instagram: 'instagram', Reels: 'reels' }[item.platform] || 'tiktok';
+      const stClsMap  = { 'Odottaa': 'status-waiting', 'Hyväksytty': 'status-approved', 'Muutoksia pyydetty': 'status-changes' };
 
-      // Platform badge
-      const platMap = {
-        "TikTok":    "platform-tiktok",
-        "Instagram": "platform-instagram",
-        "Reels":     "platform-reels",
-      };
-      const platClass = platMap[item.platform] || "platform-tiktok";
-
-      // Status badge
-      const statusMap = {
-        "Odottaa":              ["status-waiting",  "Odottaa"],
-        "Hyväksytty":           ["status-approved", "Hyväksytty"],
-        "Muutoksia pyydetty":   ["status-changes",  "Muutoksia pyydetty"],
-      };
-      const [stCls, stLabel] = statusMap[initStatus] || ["status-waiting", initStatus];
-
-      // Media
-      let mediaHTML = "";
+      let media = '';
       if (item.embedUrl) {
-        // Detect YouTube / Vimeo / direct video
         if (/youtube\.com|youtu\.be/.test(item.embedUrl)) {
-          const ytId = item.embedUrl.match(/(?:v=|youtu\.be\/)([^&?/]+)/)?.[1] || "";
-          mediaHTML = `<iframe src="https://www.youtube.com/embed/${ytId}" allowfullscreen></iframe>`;
+          const vid = item.embedUrl.match(/(?:v=|youtu\.be\/)([^&?/]+)/)?.[1] || '';
+          media = `<iframe src="https://www.youtube.com/embed/${vid}" allowfullscreen></iframe>`;
         } else if (/vimeo\.com/.test(item.embedUrl)) {
-          const vmId = item.embedUrl.match(/vimeo\.com\/(\d+)/)?.[1] || "";
-          mediaHTML = `<iframe src="https://player.vimeo.com/video/${vmId}" allowfullscreen></iframe>`;
+          const vid = item.embedUrl.match(/vimeo\.com\/(\d+)/)?.[1] || '';
+          media = `<iframe src="https://player.vimeo.com/video/${vid}" allowfullscreen></iframe>`;
         } else {
-          mediaHTML = `<video src="${item.embedUrl}" controls playsinline></video>`;
+          media = `<video src="${item.embedUrl}" controls playsinline></video>`;
         }
       } else if (item.thumbnailUrl) {
-        mediaHTML = `<img src="${item.thumbnailUrl}" alt="Thumbnail" />`;
+        media = `<img src="${item.thumbnailUrl}" alt="">`;
       } else {
-        mediaHTML = `<div class="media-placeholder">
-          <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-            <rect x="2" y="2" width="20" height="20" rx="2"/><polygon points="10,8 16,12 10,16"/>
-          </svg>
-          <span style="font-size:0.62rem;letter-spacing:0.1em">Ei esikatselua</span>
+        const icon = item.type === 'image'
+          ? `<rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/>`
+          : `<polygon points="5 3 19 12 5 21 5 3"/>`;
+        const label = item.type === 'image' ? 'Kuva tulossa' : 'Video tulossa';
+        media = `<div class="card-placeholder">
+          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">${icon}</svg>
+          <span class="card-placeholder-text">${label}</span>
         </div>`;
       }
 
+      const approvedHide = st === 'Hyväksytty' ? 'style="display:none"' : '';
+      const fbOpen = st === 'Muutoksia pyydetty' ? 'open' : '';
+      const approveActive = st === 'Hyväksytty' ? ' active' : '';
+      const requestActive = st === 'Muutoksia pyydetty' ? ' active' : '';
+
       card.innerHTML = `
-        <div class="card-media">${mediaHTML}</div>
+        <div class="card-media">${media}</div>
         <div class="card-body">
-          <div class="card-badges">
-            <span class="platform-badge ${platClass}">${item.platform || ""}</span>
-            <span class="status-badge ${stCls}" id="sbadge-${item.id}">${stLabel}</span>
+          <div class="card-meta">
+            <span class="platform-tag ${platClass}">${item.platform}</span>
+            <span class="status-tag ${stClsMap[st] || 'status-waiting'}" id="stag-${item.id}">${st}</span>
           </div>
-          <div class="card-caption">${item.caption || ""}</div>
-          <div class="card-approved-message" id="approved-msg-${item.id}">✓ Hyväksytty</div>
-          <div class="card-actions" id="actions-${item.id}">
-            <button class="btn btn-approve" onclick="approveCard('${item.id}')">Hyväksyn</button>
-            <button class="btn btn-changes" onclick="requestChanges('${item.id}')">Pyydän muutoksia</button>
+          <div class="card-caption">${item.caption || ''}</div>
+          <div class="card-actions" id="actions-${item.id}" ${approvedHide}>
+            <button class="action-btn approve${approveActive}" onclick="approveCard('${item.id}')">✓ &nbsp;Hyväksyn</button>
+            <button class="action-btn request${requestActive}" onclick="requestChanges('${item.id}')">✗ &nbsp;Muutoksia</button>
           </div>
-          <div class="feedback-area" id="feedback-${item.id}">
-            <textarea placeholder="Kuvaile toivomasi muutokset..." id="textarea-${item.id}"></textarea>
-            <button class="btn-submit" onclick="submitFeedback('${item.id}', '${formspreeId}', '${(item.caption || "").replace(/'/g,"\\'")}')">Lähetä palaute</button>
-            <div class="feedback-sent" id="sent-${item.id}">✓ Palaute lähetetty!</div>
+          <div class="feedback-box ${fbOpen}" id="fb-${item.id}">
+            <textarea class="feedback-textarea" id="fbt-${item.id}" placeholder="Kerro mitä haluatte muuttaa..."></textarea>
+            <button class="feedback-send-btn" onclick="sendFeedback('${item.id}','${formId}','${(item.caption||'').replace(/'/g,"\\'")}')">Lähetä palaute</button>
+            <div class="feedback-sent" id="fbsent-${item.id}">✓ Palaute lähetetty!</div>
           </div>
-        </div>
-      `;
-
-      // Restore state if already approved/changes
-      if (initStatus === "Hyväksytty") {
-        setTimeout(() => setApproved(item.id), 0);
-      } else if (initStatus === "Muutoksia pyydetty") {
-        setTimeout(() => setChanges(item.id), 0);
-      }
-
+        </div>`;
       grid.appendChild(card);
     });
-  }
-
-  function setApproved(id) {
-    const card = document.getElementById("card-" + id);
-    if (!card) return;
-    card.className = "content-card approved";
-    const badge = document.getElementById("sbadge-" + id);
-    if (badge) { badge.className = "status-badge status-approved"; badge.textContent = "Hyväksytty"; }
-    const actions = document.getElementById("actions-" + id);
-    const msg = document.getElementById("approved-msg-" + id);
-    const fb = document.getElementById("feedback-" + id);
-    if (actions) actions.style.display = "none";
-    if (fb) fb.style.display = "none";
-    if (msg) msg.style.display = "block";
-  }
-
-  function setChanges(id) {
-    const card = document.getElementById("card-" + id);
-    if (!card) return;
-    card.className = "content-card changes";
-    const badge = document.getElementById("sbadge-" + id);
-    if (badge) { badge.className = "status-badge status-changes"; badge.textContent = "Muutoksia pyydetty"; }
-    const fb = document.getElementById("feedback-" + id);
-    if (fb) fb.style.display = "block";
+    updateSubmitStatus();
   }
 
   function approveCard(id) {
-    setApproved(id);
-    // Lightweight Formspree ping for approval notification (no user input needed)
-    const d = CLIENT_DATA;
-    if (d.formspreeId && d.formspreeId !== "YOUR_FORMSPREE_ID") {
-      fetch("https://formspree.io/f/" + d.formspreeId, {
-        method: "POST",
-        headers: { "Content-Type": "application/json", "Accept": "application/json" },
-        body: JSON.stringify({
-          _subject: "Hyväksyntä — " + d.clientName,
-          client: d.clientName,
-          action: "Hyväksytty",
-          card_id: id,
-        }),
-      }).catch(() => {});
-    }
+    const card = document.querySelector(`[data-id="${id}"]`);
+    card.className = 'content-card approved';
+    document.getElementById('stag-' + id).className = 'status-tag status-approved';
+    document.getElementById('stag-' + id).textContent = 'Hyväksytty';
+    document.getElementById('fb-' + id).classList.remove('open');
+    const btns = document.getElementById('actions-' + id).querySelectorAll('.action-btn');
+    btns.forEach(b => b.classList.remove('active'));
+    btns[0].classList.add('active');
+    updateSubmitStatus();
   }
 
   function requestChanges(id) {
-    setChanges(id);
+    const card = document.querySelector(`[data-id="${id}"]`);
+    card.className = 'content-card changes';
+    document.getElementById('stag-' + id).className = 'status-tag status-changes';
+    document.getElementById('stag-' + id).textContent = 'Muutoksia pyydetty';
+    document.getElementById('fb-' + id).classList.add('open');
+    const btns = document.getElementById('actions-' + id).querySelectorAll('.action-btn');
+    btns.forEach(b => b.classList.remove('active'));
+    btns[1].classList.add('active');
+    updateSubmitStatus();
   }
 
-  function submitFeedback(id, formspreeId, caption) {
-    const ta = document.getElementById("textarea-" + id);
-    const msg = (ta && ta.value.trim()) ? ta.value.trim() : "(ei viestiä)";
-    const d = CLIENT_DATA;
-
-    if (!formspreeId || formspreeId === "YOUR_FORMSPREE_ID") {
-      alert("Formspree-tunnus puuttuu. Ota yhteyttä RN Mediaan.");
-      return;
-    }
-
-    fetch("https://formspree.io/f/" + formspreeId, {
-      method: "POST",
-      headers: { "Content-Type": "application/json", "Accept": "application/json" },
-      body: JSON.stringify({
-        _subject: "Muutospyyntö — " + d.clientName,
-        client: d.clientName,
-        card_id: id,
-        caption: caption,
-        feedback: msg,
-      }),
-    })
-    .then(r => {
-      const sentEl = document.getElementById("sent-" + id);
+  async function sendFeedback(id, formId, caption) {
+    const ta = document.getElementById('fbt-' + id);
+    const msg = ta.value.trim() || '(ei viestiä)';
+    if (!formId || formId === 'YOUR_FORMSPREE_ID') { alert('Formspree-tunnus puuttuu.'); return; }
+    const btn = ta.nextElementSibling;
+    btn.disabled = true;
+    try {
+      const r = await fetch('https://formspree.io/f/' + formId, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+        body: JSON.stringify({ _subject: 'Muutospyyntö — ' + CLIENT_DATA.clientName, card_id: id, caption, feedback: msg }),
+      });
       if (r.ok) {
-        if (sentEl) sentEl.style.display = "block";
-        if (ta) ta.disabled = true;
-        const submitBtn = ta && ta.nextElementSibling;
-        if (submitBtn) submitBtn.disabled = true;
-      } else {
-        alert("Lähetys epäonnistui. Yritä uudelleen tai ota yhteyttä RN Mediaan.");
-      }
-    })
-    .catch(() => alert("Verkkovirhe. Tarkista yhteys ja yritä uudelleen."));
+        ta.disabled = true;
+        document.getElementById('fbsent-' + id).style.display = 'block';
+      } else { btn.disabled = false; alert('Lähetys epäonnistui. Yritä uudelleen.'); }
+    } catch { btn.disabled = false; alert('Verkkovirhe.'); }
   }
 
-  // ── Init ───────────────────────────────────────────────────
-  if (sessionStorage.getItem("fora_auth") === "1") {
-    document.getElementById("pin-screen").style.display = "none";
+  function updateSubmitStatus() {
+    const cards = document.querySelectorAll('.content-card');
+    let approved = 0, changes = 0;
+    cards.forEach(c => {
+      if (c.classList.contains('approved')) approved++;
+      if (c.classList.contains('changes'))  changes++;
+    });
+    const done = approved + changes, total = cards.length;
+    const statusEl = document.getElementById('submit-status');
+    const btn = document.getElementById('submit-btn');
+    if (done === total && total > 0) {
+      statusEl.innerHTML = `<strong>${approved} hyväksytty</strong>, ${changes} muutospyyntöä — kaikki käyty läpi.`;
+      btn.disabled = false;
+    } else {
+      statusEl.innerHTML = `${done} / ${total} käyty läpi — <strong>${total - done} jäljellä</strong>.`;
+      btn.disabled = true;
+    }
+  }
+
+  async function submitAll() {
+    const cards = document.querySelectorAll('.content-card');
+    const rows = [];
+    cards.forEach(card => {
+      const id = card.dataset.id;
+      const platform = card.querySelector('.platform-tag').textContent.trim();
+      const caption  = card.querySelector('.card-caption').textContent.trim().slice(0, 80) + '...';
+      const status   = card.classList.contains('approved') ? '✓ Hyväksytty' : '✗ Muutospyyntö';
+      const fb       = card.querySelector('.feedback-textarea')?.value.trim() || '';
+      rows.push(`Sisältö ${id} (${platform})\nTila: ${status}\nKuvaus: ${caption}${fb ? '\nPalaute: ' + fb : ''}`);
+    });
+    const btn = document.getElementById('submit-btn');
+    btn.disabled = true; btn.textContent = 'Lähetetään...';
+    try {
+      const fd = new FormData();
+      fd.append('_subject', CLIENT_DATA.clientName + ' – Sisällön hyväksynnät');
+      fd.append('asiakas', CLIENT_DATA.clientName);
+      fd.append('hyväksynnät', rows.join('\n\n---\n\n'));
+      const r = await fetch('https://formspree.io/f/' + CLIENT_DATA.formspreeId, { method: 'POST', body: fd, headers: { 'Accept': 'application/json' } });
+      if (r.ok) {
+        document.getElementById('submit-bar').style.display = 'none';
+        document.getElementById('approval-success').style.display = 'block';
+      } else { btn.disabled = false; btn.textContent = 'Lähetä hyväksynnät →'; alert('Lähetys epäonnistui.'); }
+    } catch { btn.disabled = false; btn.textContent = 'Lähetä hyväksynnät →'; alert('Verkkovirhe.'); }
+  }
+
+  // Init — skip PIN if session already authenticated
+  if (sessionStorage.getItem('fora_auth') === '1') {
+    document.getElementById('pin-screen').classList.add('hidden');
     populateDashboard();
-    document.getElementById("dashboard").classList.add("visible");
+    document.getElementById('portal').classList.add('visible');
   }
 </script>
 </body>
