@@ -5,40 +5,91 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Förå Oy – Asiakasportaali</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400;500&family=Playfair+Display:wght@400;600&display=swap" rel="stylesheet">
+
+  <script>
+    // ============================================================
+    //  PIN — change this value to update the access code (6 digits)
+    // ============================================================
+    const ACCESS_PIN = "123456";
+
+    // ============================================================
+    //  ✏️  EDIT HERE — update this object each month.
+    //  No other code needs to be touched.
+    // ============================================================
+    const CLIENT_DATA = {
+      clientName:               "Förå Oy",
+      package:                  "Custom €75 (125) /kk",
+
+      nextShootDate:            "",       // e.g. "15.6.2025"
+      videosDeliveredThisMonth: 0,
+      videosTotal:              4,
+      postsScheduled:           0,
+      postsTotal:               4,
+      nextReportDate:           "",       // e.g. "30.6.2025"
+      reportStatus:             "Tulossa",// "Tulossa" | "Valmis" | "Lähetetty"
+
+      // Leave empty to hide the note box
+      monthlyNote:              "",
+
+      // Formspree form ID
+      formspreeId:              "mdajqwqr",
+
+      contentItems: [
+        // Duplicate / edit blocks below.
+        // {
+        //   id: "v1",
+        //   platform: "TikTok",          // "TikTok" | "Instagram" | "Reels"
+        //   type: "video",               // "video" | "image"
+        //   embedUrl: "",                // YouTube / Vimeo URL or direct .mp4, or ""
+        //   thumbnailUrl: "",            // fallback image, or ""
+        //   caption: "Kuvateksti tähän.",
+        //   status: "Odottaa",           // "Odottaa" | "Hyväksytty" | "Muutoksia pyydetty"
+        // },
+      ],
+    };
+    // ============================================================
+    //  END EDIT HERE
+    // ============================================================
+  </script>
+
   <style>
     :root {
-      --bg:       #111111;
-      --surface:  #181818;
-      --surface2: #1d1d1d;
-      --border:   #262626;
-      --border2:  #333333;
-      --text:     #f0f0f0;
-      --muted:    #888888;
-      --muted2:   #4a4a4a;
-      --white:    #ffffff;
-      --green:    #22c55e;
-      --green-bg: #052512;
+      --bg:           #111111;
+      --surface:      #181818;
+      --surface2:     #1d1d1d;
+      --border:       #262626;
+      --border2:      #333333;
+      --text:         #f0f0f0;
+      --muted:        #888888;
+      --muted2:       #4a4a4a;
+      --white:        #ffffff;
+      --accent:       #e8e0d0;
+      --accent-dim:   #b8b0a0;
+      --green:        #22c55e;
+      --green-bg:     #052512;
       --green-border: #166534;
-      --red:      #ef4444;
-      --red-bg:   #2a0707;
-      --red-border: #991b1b;
-      --accent:   #ffffff;
-      --r:        10px;
-      --r-sm:     6px;
+      --red:          #ef4444;
+      --red-bg:       #2a0707;
+      --red-border:   #991b1b;
+      --r:            10px;
+      --r-sm:         6px;
+      --mono:         'DM Mono', monospace;
+      --serif:        'Playfair Display', serif;
     }
 
     *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
     body {
-      font-family: 'Inter', sans-serif;
+      font-family: var(--mono);
       background: var(--bg);
       color: var(--text);
       -webkit-font-smoothing: antialiased;
       min-height: 100vh;
     }
 
-    /* ── PIN SCREEN ─────────────────────────────────── */
+    /* ── PIN SCREEN ──────────────────────────────────────── */
     #pin-screen {
       position: fixed;
       inset: 0;
@@ -63,19 +114,17 @@
       margin-bottom: 48px;
     }
     .pin-brand-name {
-      font-family: 'Anton', sans-serif;
-      font-size: 22px;
-      letter-spacing: 0.04em;
-      color: var(--white);
+      font-family: var(--mono);
+      font-size: 13px;
+      font-weight: 500;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--accent);
     }
-    .pin-sep {
-      width: 1px;
-      height: 14px;
-      background: var(--border2);
-    }
+    .pin-sep { width: 1px; height: 14px; background: var(--border2); }
     .pin-subtitle {
       font-size: 11px;
-      font-weight: 500;
+      font-weight: 400;
       letter-spacing: 0.1em;
       text-transform: uppercase;
       color: var(--muted);
@@ -90,36 +139,35 @@
       text-align: center;
     }
     .pin-title {
-      font-size: 13px;
-      font-weight: 600;
-      letter-spacing: 0.08em;
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.14em;
       text-transform: uppercase;
       color: var(--muted);
       margin-bottom: 24px;
     }
 
+    @keyframes pinShake {
+      0%,100% { transform: translateX(0); }
+      20%,60%  { transform: translateX(-7px); }
+      40%,80%  { transform: translateX(7px); }
+    }
+
     .pin-dots {
       display: flex;
       justify-content: center;
-      gap: 14px;
+      gap: 10px;
       margin-bottom: 32px;
     }
     .pin-dot {
-      width: 14px;
-      height: 14px;
+      width: 13px; height: 13px;
       border-radius: 50%;
       border: 2px solid var(--border2);
       background: transparent;
       transition: background 0.15s, border-color 0.15s;
     }
-    .pin-dot.filled {
-      background: var(--white);
-      border-color: var(--white);
-    }
-    .pin-dot.error {
-      background: var(--red);
-      border-color: var(--red);
-    }
+    .pin-dot.filled { background: var(--accent); border-color: var(--accent); }
+    .pin-dot.error  { background: var(--red);    border-color: var(--red); }
 
     .pin-pad {
       display: grid;
@@ -131,596 +179,281 @@
       border: 1px solid var(--border);
       border-radius: var(--r-sm);
       color: var(--white);
-      font-family: 'Anton', sans-serif;
-      font-size: 22px;
-      letter-spacing: 0.02em;
+      font-family: var(--mono);
+      font-size: 20px;
+      font-weight: 400;
       height: 58px;
       cursor: pointer;
       transition: background 0.1s, transform 0.08s;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+      display: flex; align-items: center; justify-content: center;
     }
-    .pin-btn:hover { background: #252525; }
+    .pin-btn:hover  { background: #252525; }
     .pin-btn:active { transform: scale(0.95); background: #2e2e2e; }
-    .pin-btn.del {
-      font-family: 'Inter', sans-serif;
-      font-size: 18px;
-      color: var(--muted);
-    }
-    .pin-btn.empty { pointer-events: none; background: transparent; border-color: transparent; }
+    .pin-btn.del    { font-size: 18px; color: var(--muted); }
+    .pin-btn.empty  { pointer-events: none; background: transparent; border-color: transparent; }
 
     .pin-error {
       margin-top: 18px;
-      font-size: 12px;
+      font-size: 11px;
+      letter-spacing: 0.06em;
       color: var(--red);
-      font-weight: 500;
       min-height: 18px;
-      letter-spacing: 0.03em;
     }
 
-    /* ── PORTAL ─────────────────────────────────────── */
-    #portal {
-      display: none;
-      max-width: 960px;
-      margin: 0 auto;
-      padding: 56px 40px 80px;
-    }
+    /* ── PORTAL ──────────────────────────────────────────── */
+    #portal { display: none; max-width: 960px; margin: 0 auto; padding: 56px 40px 80px; }
     #portal.visible { display: block; }
 
-    /* ── TOP BAR ────────────────────────────────────── */
+    /* ── TOP BAR ─────────────────────────────────────────── */
     .topbar {
       display: flex;
       justify-content: space-between;
       align-items: center;
       margin-bottom: 48px;
     }
-    .topbar-brand {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
+    .topbar-brand { display: flex; align-items: center; gap: 12px; }
     .topbar-name {
-      font-family: 'Anton', sans-serif;
-      font-size: 20px;
-      letter-spacing: 0.04em;
-      color: var(--white);
+      font-family: var(--mono);
+      font-size: 13px; font-weight: 500;
+      letter-spacing: 0.22em; text-transform: uppercase;
+      color: var(--accent);
     }
     .topbar-sep { width: 1px; height: 14px; background: var(--border2); }
-    .topbar-sub {
-      font-size: 11px;
-      font-weight: 500;
-      letter-spacing: 0.09em;
-      text-transform: uppercase;
-      color: var(--muted);
+    .topbar-client {
+      font-family: var(--serif);
+      font-size: 18px; font-weight: 400;
+      color: var(--white);
+    }
+    .topbar-month {
+      font-size: 10px; letter-spacing: 0.1em;
+      text-transform: uppercase; color: var(--muted); margin-top: 1px;
+    }
+    .topbar-right { display: flex; align-items: center; gap: 10px; }
+    .pkg-badge {
+      font-size: 10px; letter-spacing: 0.08em;
+      color: var(--accent-dim);
+      border: 1px solid var(--border2);
+      border-radius: 4px; padding: 4px 10px; white-space: nowrap;
     }
     .logout-btn {
-      font-size: 11px;
-      font-weight: 600;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      color: var(--muted2);
-      background: none;
+      font-family: var(--mono);
+      font-size: 10px; font-weight: 500;
+      letter-spacing: 0.1em; text-transform: uppercase;
+      color: var(--muted2); background: none;
       border: 1px solid var(--border);
-      border-radius: var(--r-sm);
-      padding: 7px 14px;
-      cursor: pointer;
-      transition: color 0.15s, border-color 0.15s;
+      border-radius: var(--r-sm); padding: 7px 14px;
+      cursor: pointer; transition: color 0.15s, border-color 0.15s;
     }
     .logout-btn:hover { color: var(--muted); border-color: var(--border2); }
 
-    /* ── SECTION ────────────────────────────────────── */
-    .section {
-      margin-bottom: 64px;
-    }
-    .section-header {
-      display: flex;
-      align-items: baseline;
-      gap: 14px;
-      margin-bottom: 28px;
-    }
+    /* ── SECTION ─────────────────────────────────────────── */
+    .section { margin-bottom: 56px; }
+    .section-header { display: flex; align-items: baseline; gap: 14px; margin-bottom: 24px; }
     .section-label {
-      font-size: 10px;
-      font-weight: 600;
-      letter-spacing: 0.13em;
-      text-transform: uppercase;
-      color: var(--muted);
+      font-size: 10px; font-weight: 500;
+      letter-spacing: 0.16em; text-transform: uppercase;
+      color: var(--muted); white-space: nowrap;
     }
-    .section-rule {
-      flex: 1;
-      height: 1px;
-      background: var(--border);
-    }
+    .section-rule { flex: 1; height: 1px; background: var(--border); }
 
-    /* ── WELCOME CARD ───────────────────────────────── */
-    .welcome-card {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: var(--r);
-      padding: 36px 40px;
-      display: grid;
-      grid-template-columns: 1fr auto;
-      gap: 32px;
-      align-items: start;
-      margin-bottom: 20px;
+    /* ── STATS ROW ───────────────────────────────────────── */
+    .stats-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
+    .stat-card {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: var(--r); padding: 20px 18px 16px;
     }
-    .welcome-title {
-      font-family: 'Anton', sans-serif;
-      font-size: 42px;
-      line-height: 1.05;
-      color: var(--white);
-      margin-bottom: 14px;
+    .stat-label {
+      font-size: 9px; font-weight: 500;
+      letter-spacing: 0.14em; text-transform: uppercase;
+      color: var(--muted); margin-bottom: 10px;
     }
-    .welcome-body {
-      font-size: 14px;
-      font-weight: 300;
-      line-height: 1.8;
-      color: var(--text);
-      max-width: 520px;
+    .stat-value { font-size: 1.5rem; font-weight: 500; color: var(--accent); line-height: 1; margin-bottom: 4px; }
+    .stat-value .denom { font-size: 0.95rem; color: var(--muted); }
+    .stat-sub  { font-size: 10px; color: var(--muted); margin-bottom: 10px; }
+    .stat-text { font-size: 14px; color: var(--white); margin-bottom: 4px; }
+    .progress-bar  { height: 2px; background: var(--border2); border-radius: 1px; overflow: hidden; }
+    .progress-fill { height: 100%; background: var(--accent); border-radius: 1px; transition: width 0.8s ease; }
+    .stat-pill {
+      display: inline-block; font-size: 9px; font-weight: 500;
+      letter-spacing: 0.08em; padding: 3px 8px; border-radius: 20px; margin-top: 6px;
     }
-    .package-badge {
-      background: var(--surface2);
-      border: 1px solid var(--border2);
-      border-radius: var(--r);
-      padding: 20px 24px;
-      text-align: center;
-      white-space: nowrap;
-      flex-shrink: 0;
-    }
-    .package-label {
-      font-size: 9px;
-      font-weight: 600;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      color: var(--muted);
-      margin-bottom: 8px;
-    }
-    .package-name {
-      font-family: 'Anton', sans-serif;
-      font-size: 24px;
-      color: var(--white);
-      margin-bottom: 6px;
-    }
-    .package-price {
-      font-size: 28px;
-      font-weight: 600;
-      color: var(--white);
-      line-height: 1;
-    }
-    .package-period {
-      font-size: 12px;
-      color: var(--muted);
-      font-weight: 400;
-    }
+    .pill-coming { background: #1a2a1a; color: var(--green); border: 1px solid var(--green-border); }
+    .pill-ready  { background: #1a2030; color: #6faed9;      border: 1px solid #2a4060; }
+    .pill-sent   { background: #2a2010; color: #d4a843;      border: 1px solid #4a3820; }
 
-    /* ── TIMELINE ───────────────────────────────────── */
-    .timeline {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 12px;
-    }
-    .tl-item {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: var(--r);
-      padding: 20px 18px;
-      position: relative;
-    }
-    .tl-item::after {
-      content: '→';
-      position: absolute;
-      right: -10px;
-      top: 50%;
-      transform: translateY(-50%);
-      color: var(--muted2);
-      font-size: 14px;
-      z-index: 1;
-    }
-    .tl-item:last-child::after { display: none; }
-    .tl-day {
-      font-size: 9px;
-      font-weight: 600;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      color: var(--muted);
-      margin-bottom: 8px;
-    }
-    .tl-title {
-      font-size: 13px;
-      font-weight: 600;
-      color: var(--white);
-      margin-bottom: 6px;
-      line-height: 1.3;
-    }
-    .tl-desc {
-      font-size: 11px;
-      font-weight: 300;
-      color: var(--muted);
-      line-height: 1.55;
-    }
-
-    /* ── ONBOARDING FORM ────────────────────────────── */
-    .form-card {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: var(--r);
-      padding: 32px 36px;
-    }
-    .form-title {
-      font-size: 16px;
-      font-weight: 600;
-      color: var(--white);
-      margin-bottom: 6px;
-    }
-    .form-sub {
-      font-size: 13px;
-      font-weight: 300;
-      color: var(--muted);
-      margin-bottom: 28px;
-    }
-    .form-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 18px;
-    }
-    .form-field {
-      display: flex;
-      flex-direction: column;
-      gap: 7px;
-    }
-    .form-field.full { grid-column: 1 / -1; }
-    .form-label {
-      font-size: 11px;
-      font-weight: 600;
-      letter-spacing: 0.07em;
-      text-transform: uppercase;
-      color: var(--muted);
-    }
-    .form-input,
-    .form-textarea {
-      background: var(--surface2);
-      border: 1px solid var(--border2);
-      border-radius: var(--r-sm);
-      color: var(--text);
-      font-family: 'Inter', sans-serif;
-      font-size: 13px;
-      font-weight: 400;
-      padding: 11px 14px;
-      outline: none;
-      transition: border-color 0.15s;
-      resize: none;
-    }
-    .form-input:focus,
-    .form-textarea:focus { border-color: #555; }
-    .form-input::placeholder,
-    .form-textarea::placeholder { color: var(--muted2); }
-    .form-textarea { min-height: 100px; line-height: 1.6; }
-
-    .color-row {
-      display: flex;
-      gap: 10px;
-      align-items: center;
-    }
-    .color-input-wrap {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      background: var(--surface2);
-      border: 1px solid var(--border2);
-      border-radius: var(--r-sm);
-      padding: 8px 12px;
-      flex: 1;
-      transition: border-color 0.15s;
-    }
-    .color-input-wrap:focus-within { border-color: #555; }
-    input[type="color"] {
-      width: 24px;
-      height: 24px;
-      border: none;
-      background: none;
-      padding: 0;
-      cursor: pointer;
-      border-radius: 4px;
-      overflow: hidden;
-    }
-    .color-hex {
-      background: none;
-      border: none;
-      color: var(--text);
-      font-family: 'Inter', sans-serif;
-      font-size: 13px;
-      outline: none;
-      width: 80px;
-    }
-
-    .form-submit {
-      margin-top: 24px;
-      background: var(--white);
-      color: #111;
-      font-family: 'Inter', sans-serif;
-      font-size: 13px;
-      font-weight: 600;
-      padding: 12px 28px;
-      border: none;
-      border-radius: var(--r-sm);
-      cursor: pointer;
-      transition: background 0.15s, transform 0.1s;
-    }
-    .form-submit:hover { background: #e8e8e8; }
-    .form-submit:active { transform: scale(0.98); }
-
-    .form-success {
+    /* ── MONTHLY NOTE ────────────────────────────────────── */
+    #monthly-note-box {
       display: none;
-      margin-top: 16px;
-      padding: 12px 16px;
-      background: var(--green-bg);
-      border: 1px solid var(--green-border);
-      border-radius: var(--r-sm);
-      font-size: 13px;
-      color: var(--green);
-      font-weight: 500;
+      background: #161410;
+      border: 1px solid #3a3020;
+      border-left: 3px solid var(--accent);
+      border-radius: var(--r);
+      padding: 16px 20px;
+      margin-bottom: 48px;
     }
+    .note-label {
+      font-size: 9px; font-weight: 500;
+      letter-spacing: 0.16em; text-transform: uppercase;
+      color: var(--accent-dim); margin-bottom: 6px;
+    }
+    #monthly-note-text { font-size: 13px; color: var(--accent); line-height: 1.65; }
 
-    /* ── CONTENT APPROVAL ───────────────────────────── */
-    .content-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 16px;
+    /* ── CONTENT GRID ────────────────────────────────────── */
+    .content-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+    .content-empty {
+      grid-column: 1 / -1; text-align: center; padding: 48px;
+      color: var(--muted); font-size: 11px; letter-spacing: 0.1em;
+      border: 1px dashed var(--border); border-radius: var(--r);
     }
 
     .content-card {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: var(--r);
-      overflow: hidden;
-      display: flex;
-      flex-direction: column;
-      transition: border-color 0.2s;
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: var(--r); overflow: hidden;
+      display: flex; flex-direction: column;
+      transition: border-color 0.2s, background 0.2s;
     }
-    .content-card.approved {
-      border-color: var(--green-border);
-      background: #0a1a0f;
-    }
-    .content-card.changes {
-      border-color: var(--red-border);
-      background: #1a0a0a;
-    }
+    .content-card.approved { border-color: var(--green-border); background: #0a1a0f; }
+    .content-card.changes  { border-color: var(--red-border);   background: #1a0a0a; }
 
     .card-media {
-      width: 100%;
-      aspect-ratio: 9/16;
-      background: var(--surface2);
-      position: relative;
-      overflow: hidden;
+      width: 100%; aspect-ratio: 9/16;
+      background: var(--surface2); position: relative; overflow: hidden;
     }
-    .card-media iframe {
-      width: 100%;
-      height: 100%;
-      border: none;
-      display: block;
-    }
+    .card-media iframe, .card-media video { width: 100%; height: 100%; border: none; display: block; }
+    .card-media img { width: 100%; height: 100%; object-fit: cover; display: block; }
     .card-placeholder {
-      width: 100%;
-      height: 100%;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      gap: 10px;
-      color: var(--muted2);
+      width: 100%; height: 100%;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      gap: 10px; color: var(--muted2);
     }
     .card-placeholder svg { opacity: 0.4; }
-    .card-placeholder-text {
-      font-size: 11px;
-      font-weight: 500;
-      letter-spacing: 0.06em;
-      text-transform: uppercase;
-    }
+    .card-placeholder-text { font-size: 10px; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; }
 
-    .card-body {
-      padding: 16px 18px;
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-    }
+    .card-body { padding: 16px 18px; flex: 1; display: flex; flex-direction: column; gap: 12px; }
+    .card-meta { display: flex; align-items: center; justify-content: space-between; gap: 8px; flex-wrap: wrap; }
 
-    .card-meta {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
     .platform-tag {
-      font-size: 9px;
-      font-weight: 600;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      padding: 3px 9px;
-      border-radius: 100px;
-      border: 1px solid var(--border2);
-      background: var(--surface2);
-      color: var(--text);
+      font-size: 9px; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase;
+      padding: 3px 9px; border-radius: 100px;
+      border: 1px solid var(--border2); background: var(--surface2); color: var(--text);
     }
-    .platform-tag.tiktok { border-color: #2a2a2a; color: #f0f0f0; }
+    .platform-tag.tiktok    { border-color: #2a2a2a; color: #f0f0f0; }
     .platform-tag.instagram { border-color: #3a2040; color: #d4a0e0; background: #1e1228; }
+    .platform-tag.reels     { border-color: #3a2020; color: #ffb0b0; background: #1e1010; }
 
-    .card-caption {
-      font-size: 12px;
-      font-weight: 300;
-      line-height: 1.65;
-      color: var(--muted);
+    .status-tag {
+      font-size: 9px; font-weight: 500; letter-spacing: 0.06em;
+      padding: 3px 8px; border-radius: 100px;
     }
+    .status-waiting  { background: #1e1e1e;      color: var(--muted); border: 1px solid var(--border2); }
+    .status-approved { background: var(--green-bg); color: var(--green); border: 1px solid var(--green-border); }
+    .status-changes  { background: var(--red-bg);   color: var(--red);   border: 1px solid var(--red-border); }
 
-    .card-actions {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 8px;
-      margin-top: auto;
-    }
+    .card-caption { font-size: 12px; font-weight: 300; line-height: 1.65; color: var(--muted); }
+
+    .card-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: auto; }
     .action-btn {
-      font-family: 'Inter', sans-serif;
-      font-size: 11px;
-      font-weight: 600;
-      letter-spacing: 0.05em;
-      padding: 9px 8px;
-      border-radius: var(--r-sm);
-      border: 1px solid var(--border2);
-      cursor: pointer;
-      transition: all 0.15s;
-      background: var(--surface2);
-      color: var(--muted);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 5px;
+      font-family: var(--mono);
+      font-size: 10px; font-weight: 500; letter-spacing: 0.06em;
+      padding: 9px 8px; border-radius: var(--r-sm);
+      border: 1px solid var(--border2); cursor: pointer; transition: all 0.15s;
+      background: var(--surface2); color: var(--muted);
+      display: flex; align-items: center; justify-content: center; gap: 5px;
     }
-    .action-btn.approve {
-      color: var(--green);
-      border-color: var(--green-border);
-      background: var(--green-bg);
-    }
-    .action-btn.approve:hover,
-    .action-btn.approve.active {
-      background: #0a2e18;
-      border-color: var(--green);
-    }
-    .action-btn.request {
-      color: var(--red);
-      border-color: var(--red-border);
-      background: var(--red-bg);
-    }
-    .action-btn.request:hover,
-    .action-btn.request.active {
-      background: #2e0a0a;
-      border-color: var(--red);
-    }
+    .action-btn.approve { color: var(--green); border-color: var(--green-border); background: var(--green-bg); }
+    .action-btn.approve:hover, .action-btn.approve.active { background: #0a2e18; border-color: var(--green); }
+    .action-btn.request { color: var(--red); border-color: var(--red-border); background: var(--red-bg); }
+    .action-btn.request:hover, .action-btn.request.active { background: #2e0a0a; border-color: var(--red); }
 
-    .feedback-box {
-      display: none;
-      flex-direction: column;
-      gap: 8px;
-      padding-top: 4px;
-    }
+    .feedback-box { display: none; flex-direction: column; gap: 8px; padding-top: 4px; }
     .feedback-box.open { display: flex; }
     .feedback-textarea {
-      background: var(--surface2);
-      border: 1px solid var(--red-border);
-      border-radius: var(--r-sm);
-      color: var(--text);
-      font-family: 'Inter', sans-serif;
-      font-size: 12px;
-      padding: 10px 12px;
-      outline: none;
-      resize: none;
-      min-height: 72px;
-      line-height: 1.5;
+      background: var(--surface2); border: 1px solid var(--red-border);
+      border-radius: var(--r-sm); color: var(--text);
+      font-family: var(--mono); font-size: 12px;
+      padding: 10px 12px; outline: none; resize: none; min-height: 72px; line-height: 1.5;
       transition: border-color 0.15s;
     }
     .feedback-textarea:focus { border-color: var(--red); }
     .feedback-textarea::placeholder { color: var(--muted2); }
+    .feedback-send-btn {
+      font-family: var(--mono); font-size: 10px; font-weight: 500;
+      letter-spacing: 0.1em; text-transform: uppercase;
+      background: var(--accent); color: #111;
+      border: none; border-radius: var(--r-sm);
+      padding: 9px; cursor: pointer; transition: opacity 0.15s;
+    }
+    .feedback-send-btn:hover    { opacity: 0.85; }
+    .feedback-send-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+    .feedback-sent { display: none; font-size: 11px; color: var(--green); text-align: center; padding: 4px; letter-spacing: 0.06em; }
 
-    /* ── SUBMIT BAR ─────────────────────────────────── */
+    /* ── SUBMIT BAR ──────────────────────────────────────── */
     .submit-bar {
-      margin-top: 28px;
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: var(--r);
-      padding: 20px 28px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 20px;
+      margin-top: 24px; background: var(--surface);
+      border: 1px solid var(--border); border-radius: var(--r);
+      padding: 20px 28px; display: flex;
+      align-items: center; justify-content: space-between; gap: 20px;
     }
-    .submit-status {
-      font-size: 13px;
-      color: var(--muted);
-      font-weight: 300;
-    }
-    .submit-status strong { color: var(--text); font-weight: 600; }
+    .submit-status { font-size: 13px; color: var(--muted); font-weight: 300; }
+    .submit-status strong { color: var(--text); font-weight: 500; }
     .submit-approval {
-      background: var(--white);
-      color: #111;
-      font-family: 'Inter', sans-serif;
-      font-size: 13px;
-      font-weight: 600;
-      padding: 12px 28px;
-      border: none;
-      border-radius: var(--r-sm);
-      cursor: pointer;
-      transition: background 0.15s, transform 0.1s;
+      background: var(--white); color: #111;
+      font-family: var(--mono); font-size: 12px; font-weight: 500; letter-spacing: 0.06em;
+      padding: 12px 28px; border: none; border-radius: var(--r-sm);
+      cursor: pointer; transition: background 0.15s, transform 0.1s; white-space: nowrap;
     }
-    .submit-approval:hover { background: #e8e8e8; }
-    .submit-approval:active { transform: scale(0.98); }
-    .submit-approval:disabled {
-      opacity: 0.4;
-      cursor: not-allowed;
-      transform: none;
-    }
-
+    .submit-approval:hover    { background: #e8e8e8; }
+    .submit-approval:active   { transform: scale(0.98); }
+    .submit-approval:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
     .approval-success {
-      display: none;
-      padding: 14px 20px;
-      background: var(--green-bg);
-      border: 1px solid var(--green-border);
-      border-radius: var(--r-sm);
-      font-size: 13px;
-      color: var(--green);
-      font-weight: 500;
-      text-align: center;
+      display: none; padding: 14px 20px;
+      background: var(--green-bg); border: 1px solid var(--green-border);
+      border-radius: var(--r-sm); font-size: 13px; color: var(--green);
+      font-weight: 400; text-align: center;
     }
 
-    /* ── FOOTER ─────────────────────────────────────── */
+    /* ── FOOTER ──────────────────────────────────────────── */
     .portal-footer {
-      margin-top: 80px;
-      padding-top: 24px;
+      margin-top: 80px; padding-top: 24px;
       border-top: 1px solid var(--border);
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
+      display: flex; justify-content: space-between; align-items: center;
     }
-    .portal-footer-credit {
-      font-size: 11px;
-      color: var(--muted2);
-    }
-    .portal-footer-logo {
-      font-family: 'Anton', sans-serif;
-      font-size: 16px;
-      letter-spacing: 0.06em;
-      color: var(--muted2);
-    }
+    .portal-footer-credit { font-size: 10px; color: var(--muted2); letter-spacing: 0.08em; }
+    .portal-footer-logo   { font-family: var(--mono); font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--muted2); }
 
-    /* ── RESPONSIVE ─────────────────────────────────── */
-    @media (max-width: 700px) {
+    /* ── RESPONSIVE ──────────────────────────────────────── */
+    @media (max-width: 760px) {
       #portal { padding: 32px 20px 60px; }
-      .welcome-card { grid-template-columns: 1fr; }
-      .timeline { grid-template-columns: 1fr 1fr; }
-      .tl-item::after { display: none; }
-      .form-grid { grid-template-columns: 1fr; }
+      .stats-row { grid-template-columns: 1fr 1fr; }
       .content-grid { grid-template-columns: 1fr 1fr; }
       .submit-bar { flex-direction: column; align-items: stretch; }
+      .pkg-badge { display: none; }
     }
     @media (max-width: 480px) {
       .content-grid { grid-template-columns: 1fr; }
-      .timeline { grid-template-columns: 1fr; }
+      .stats-row { grid-template-columns: 1fr; }
     }
   </style>
 </head>
 <body>
 
-<!-- ── PIN SCREEN ──────────────────────────────────── -->
+<!-- ── PIN SCREEN ──────────────────────────────────────────── -->
 <div id="pin-screen">
   <div class="pin-logo-wrap">
-    <span class="pin-brand-name">RN MEDIA</span>
+    <span class="pin-brand-name">RN Media</span>
     <div class="pin-sep"></div>
     <span class="pin-subtitle">Asiakasportaali</span>
   </div>
   <div class="pin-card">
-    <div class="pin-title">Syötä PIN-koodi</div>
-    <div class="pin-dots">
+    <div class="pin-title">Syötä 6-numeroinen PIN</div>
+    <div class="pin-dots" id="pin-dots">
       <div class="pin-dot" id="d0"></div>
       <div class="pin-dot" id="d1"></div>
       <div class="pin-dot" id="d2"></div>
       <div class="pin-dot" id="d3"></div>
+      <div class="pin-dot" id="d4"></div>
+      <div class="pin-dot" id="d5"></div>
     </div>
     <div class="pin-pad">
       <button class="pin-btn" onclick="pinPress('1')">1</button>
@@ -740,318 +473,74 @@
   </div>
 </div>
 
-<!-- ── PORTAL ───────────────────────────────────────── -->
+<!-- ── PORTAL ──────────────────────────────────────────────── -->
 <div id="portal">
 
-  <!-- TOP BAR -->
   <div class="topbar">
     <div class="topbar-brand">
-      <span class="topbar-name">RN MEDIA</span>
+      <span class="topbar-name">RN Media</span>
       <div class="topbar-sep"></div>
-      <span class="topbar-sub">Asiakasportaali</span>
+      <div>
+        <div class="topbar-client" id="hdr-client"></div>
+        <div class="topbar-month"  id="hdr-month"></div>
+      </div>
     </div>
-    <button class="logout-btn" onclick="logout()">Kirjaudu ulos</button>
+    <div class="topbar-right">
+      <span class="pkg-badge" id="hdr-pkg"></span>
+      <button class="logout-btn" onclick="logout()">Kirjaudu ulos</button>
+    </div>
   </div>
 
-  <!-- ══ SECTION 1 – ONBOARDING ════════════════════════ -->
+  <!-- Stats -->
   <div class="section">
     <div class="section-header">
-      <span class="section-label">Aloitus</span>
+      <span class="section-label">Kuukauden tilanne</span>
       <div class="section-rule"></div>
     </div>
-
-    <!-- Welcome + package -->
-    <div class="welcome-card">
-      <div>
-        <div class="welcome-title">Tervetuloa,<br>Förå Oy! 👋</div>
-        <div class="welcome-body">
-          Olemme innoissamme, että aloitatte yhteistyön RN Median kanssa.
-          Tämä portaali on teidän suora yhteyskanavanne — täällä voitte
-          täyttää aloitustietonne, hyväksyä sisältöjä ja seurata projektin
-          etenemistä. Aloitetaan!
-        </div>
+    <div class="stats-row">
+      <div class="stat-card">
+        <div class="stat-label">Videot toimitettu</div>
+        <div class="stat-value"><span id="sv-num"></span><span class="denom"> / <span id="sv-tot"></span></span></div>
+        <div class="stat-sub">tässä kuussa</div>
+        <div class="progress-bar"><div class="progress-fill" id="pv"></div></div>
       </div>
-      <div class="package-badge">
-        <div class="package-label">Paketti</div>
-        <div class="package-name">STARTER</div>
-        <div class="package-price">299€<span class="package-period">/kk</span></div>
+      <div class="stat-card">
+        <div class="stat-label">Postaukset ajoitettu</div>
+        <div class="stat-value"><span id="sp-num"></span><span class="denom"> / <span id="sp-tot"></span></span></div>
+        <div class="stat-sub">tässä kuussa</div>
+        <div class="progress-bar"><div class="progress-fill" id="pp"></div></div>
       </div>
-    </div>
-
-    <!-- Timeline -->
-    <div class="section-header" style="margin-top:32px;">
-      <span class="section-label">Ensimmäiset 2 viikkoa</span>
-      <div class="section-rule"></div>
-    </div>
-    <div class="timeline">
-      <div class="tl-item">
-        <div class="tl-day">Päivä 1–2</div>
-        <div class="tl-title">Aloitustiedot</div>
-        <div class="tl-desc">Täytätte alla olevan lomakkeen — handle, värit ja toiveet.</div>
+      <div class="stat-card">
+        <div class="stat-label">Seuraava kuvaus</div>
+        <div class="stat-text" id="ss-date"></div>
+        <div class="stat-sub">sovittu päivämäärä</div>
       </div>
-      <div class="tl-item">
-        <div class="tl-day">Päivä 3–5</div>
-        <div class="tl-title">Strategia & brändi</div>
-        <div class="tl-desc">Luomme sisältöstrategian ja visuaalisen ilmeen teidän brändiinne.</div>
+      <div class="stat-card">
+        <div class="stat-label">Raportti</div>
+        <div class="stat-sub" id="ss-report-date" style="margin-top:4px"></div>
+        <div id="ss-report-pill"></div>
       </div>
-      <div class="tl-item">
-        <div class="tl-day">Päivä 6–10</div>
-        <div class="tl-title">Sisällöntuotanto</div>
-        <div class="tl-desc">Ensimmäiset videot ja kuvat tuotetaan hyväksyttäväksi.</div>
-      </div>
-      <div class="tl-item">
-        <div class="tl-day">Päivä 11–14</div>
-        <div class="tl-title">Hyväksyntä & julkaisu</div>
-        <div class="tl-desc">Hyväksytte sisällöt tässä portaalissa ja ne julkaistaan.</div>
-      </div>
-    </div>
-
-    <!-- Onboarding form -->
-    <div class="section-header" style="margin-top:32px;">
-      <span class="section-label">Aloitustiedot</span>
-      <div class="section-rule"></div>
-    </div>
-    <div class="form-card">
-      <div class="form-title">Kerro meille brändistänne</div>
-      <div class="form-sub">Nämä tiedot auttavat meitä luomaan täydellisen sisällön teille.</div>
-
-      <form id="onboarding-form" action="https://formspree.io/f/mdajqwqr" method="POST">
-        <input type="hidden" name="_subject" value="Förå Oy – Aloitustiedot">
-        <input type="hidden" name="asiakas" value="Förå Oy">
-
-        <div class="form-grid">
-          <div class="form-field">
-            <label class="form-label" for="ig-handle">Instagram-tili</label>
-            <input class="form-input" type="text" id="ig-handle" name="instagram_handle" placeholder="@foraoy">
-          </div>
-          <div class="form-field">
-            <label class="form-label" for="tiktok-handle">TikTok-tili</label>
-            <input class="form-input" type="text" id="tiktok-handle" name="tiktok_handle" placeholder="@foraoy">
-          </div>
-
-          <div class="form-field full">
-            <label class="form-label">Brändivärit</label>
-            <div class="color-row">
-              <div class="color-input-wrap">
-                <input type="color" id="color1" value="#ffffff" oninput="syncHex(this,'hex1')">
-                <input class="color-hex" type="text" id="hex1" value="#ffffff" maxlength="7" oninput="syncColor(this,'color1')">
-              </div>
-              <div class="color-input-wrap">
-                <input type="color" id="color2" value="#111111" oninput="syncHex(this,'hex2')">
-                <input class="color-hex" type="text" id="hex2" value="#111111" maxlength="7" oninput="syncColor(this,'color2')">
-              </div>
-              <div class="color-input-wrap">
-                <input type="color" id="color3" value="#888888" oninput="syncHex(this,'hex3')">
-                <input class="color-hex" type="text" id="hex3" value="#888888" maxlength="7" oninput="syncColor(this,'color3')">
-              </div>
-            </div>
-            <input type="hidden" id="colors-hidden" name="brand_colors" value="#ffffff, #111111, #888888">
-          </div>
-
-          <div class="form-field full">
-            <label class="form-label" for="content-wishes">Sisältötoiveet</label>
-            <textarea class="form-textarea" id="content-wishes" name="content_wishes" rows="4"
-              placeholder="Mitä haluatte videoidenne ja kuvienne viestivän? Millainen sävy sopii brändillenne? Onko tuotteita tai palveluita, joita haluatte erityisesti esille?"></textarea>
-          </div>
-
-          <div class="form-field full">
-            <label class="form-label" for="notes">Muuta huomioitavaa</label>
-            <textarea class="form-textarea" id="notes" name="notes" rows="3"
-              placeholder="Aikataulut, rajoitukset, tai muita asioita mitä meidän tulee tietää..."></textarea>
-          </div>
-        </div>
-
-        <button type="submit" class="form-submit">Lähetä tiedot →</button>
-        <div class="form-success" id="onboarding-success">
-          ✓ &nbsp;Tiedot lähetetty! Otamme teihin yhteyttä pian.
-        </div>
-      </form>
     </div>
   </div>
 
-  <!-- ══ SECTION 2 – CONTENT APPROVAL ═════════════════ -->
+  <!-- Monthly note -->
+  <div id="monthly-note-box">
+    <div class="note-label">Viesti Nikolasilta</div>
+    <div id="monthly-note-text"></div>
+  </div>
+
+  <!-- Content approval -->
   <div class="section">
     <div class="section-header">
       <span class="section-label">Sisällön hyväksyntä</span>
       <div class="section-rule"></div>
     </div>
-
-    <div class="content-grid" id="content-grid">
-
-      <!-- CARD 1 -->
-      <div class="content-card" data-id="1">
-        <div class="card-media">
-          <div class="card-placeholder">
-            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-              <polygon points="5 3 19 12 5 21 5 3"/>
-            </svg>
-            <span class="card-placeholder-text">Video tulossa</span>
-          </div>
-        </div>
-        <div class="card-body">
-          <div class="card-meta">
-            <span class="platform-tag tiktok">TikTok</span>
-          </div>
-          <div class="card-caption">
-            Esittelyvideo Förå Oy:n palveluista — lyhyt, napakka ja brändin mukainen. Kohderyhmä: 25–45 -vuotiaat ammattilaiset.
-          </div>
-          <div class="card-actions">
-            <button class="action-btn approve" onclick="approveCard(this)">✓ &nbsp;Hyväksyn</button>
-            <button class="action-btn request" onclick="requestChanges(this)">✗ &nbsp;Muutoksia</button>
-          </div>
-          <div class="feedback-box">
-            <textarea class="feedback-textarea" placeholder="Kerro mitä haluatte muuttaa..."></textarea>
-          </div>
-        </div>
-      </div>
-
-      <!-- CARD 2 -->
-      <div class="content-card" data-id="2">
-        <div class="card-media">
-          <div class="card-placeholder">
-            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-              <rect x="3" y="3" width="18" height="18" rx="2"/>
-              <circle cx="8.5" cy="8.5" r="1.5"/>
-              <polyline points="21 15 16 10 5 21"/>
-            </svg>
-            <span class="card-placeholder-text">Kuva tulossa</span>
-          </div>
-        </div>
-        <div class="card-body">
-          <div class="card-meta">
-            <span class="platform-tag instagram">Instagram</span>
-          </div>
-          <div class="card-caption">
-            Lifestyle-kuva tuotteesta luonnollisessa ympäristössä. Tekstissä korostetaan laatua ja kotimaisuutta. #foraoy #suomalainen
-          </div>
-          <div class="card-actions">
-            <button class="action-btn approve" onclick="approveCard(this)">✓ &nbsp;Hyväksyn</button>
-            <button class="action-btn request" onclick="requestChanges(this)">✗ &nbsp;Muutoksia</button>
-          </div>
-          <div class="feedback-box">
-            <textarea class="feedback-textarea" placeholder="Kerro mitä haluatte muuttaa..."></textarea>
-          </div>
-        </div>
-      </div>
-
-      <!-- CARD 3 -->
-      <div class="content-card" data-id="3">
-        <div class="card-media">
-          <div class="card-placeholder">
-            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-              <polygon points="5 3 19 12 5 21 5 3"/>
-            </svg>
-            <span class="card-placeholder-text">Video tulossa</span>
-          </div>
-        </div>
-        <div class="card-body">
-          <div class="card-meta">
-            <span class="platform-tag instagram">Instagram Reels</span>
-          </div>
-          <div class="card-caption">
-            Behind-the-scenes -video arjesta. Aito ja rento tunnelma — näyttää brändin inhimillisen puolen.
-          </div>
-          <div class="card-actions">
-            <button class="action-btn approve" onclick="approveCard(this)">✓ &nbsp;Hyväksyn</button>
-            <button class="action-btn request" onclick="requestChanges(this)">✗ &nbsp;Muutoksia</button>
-          </div>
-          <div class="feedback-box">
-            <textarea class="feedback-textarea" placeholder="Kerro mitä haluatte muuttaa..."></textarea>
-          </div>
-        </div>
-      </div>
-
-      <!-- CARD 4 -->
-      <div class="content-card" data-id="4">
-        <div class="card-media">
-          <div class="card-placeholder">
-            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-              <polygon points="5 3 19 12 5 21 5 3"/>
-            </svg>
-            <span class="card-placeholder-text">Video tulossa</span>
-          </div>
-        </div>
-        <div class="card-body">
-          <div class="card-meta">
-            <span class="platform-tag tiktok">TikTok</span>
-          </div>
-          <div class="card-caption">
-            Trending-äänellä tehty tuote-esittely. Nopea leikkaus, tekstit mukana. Sopii laajaan orgaaniseen levitykseen.
-          </div>
-          <div class="card-actions">
-            <button class="action-btn approve" onclick="approveCard(this)">✓ &nbsp;Hyväksyn</button>
-            <button class="action-btn request" onclick="requestChanges(this)">✗ &nbsp;Muutoksia</button>
-          </div>
-          <div class="feedback-box">
-            <textarea class="feedback-textarea" placeholder="Kerro mitä haluatte muuttaa..."></textarea>
-          </div>
-        </div>
-      </div>
-
-      <!-- CARD 5 -->
-      <div class="content-card" data-id="5">
-        <div class="card-media">
-          <div class="card-placeholder">
-            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-              <rect x="3" y="3" width="18" height="18" rx="2"/>
-              <circle cx="8.5" cy="8.5" r="1.5"/>
-              <polyline points="21 15 16 10 5 21"/>
-            </svg>
-            <span class="card-placeholder-text">Kuva tulossa</span>
-          </div>
-        </div>
-        <div class="card-body">
-          <div class="card-meta">
-            <span class="platform-tag instagram">Instagram</span>
-          </div>
-          <div class="card-caption">
-            Brändigrafiikka — lainaus tai slogan visuaalisessa muodossa. Sopii tallennettavaksi ja jakamiseen.
-          </div>
-          <div class="card-actions">
-            <button class="action-btn approve" onclick="approveCard(this)">✓ &nbsp;Hyväksyn</button>
-            <button class="action-btn request" onclick="requestChanges(this)">✗ &nbsp;Muutoksia</button>
-          </div>
-          <div class="feedback-box">
-            <textarea class="feedback-textarea" placeholder="Kerro mitä haluatte muuttaa..."></textarea>
-          </div>
-        </div>
-      </div>
-
-      <!-- CARD 6 -->
-      <div class="content-card" data-id="6">
-        <div class="card-media">
-          <div class="card-placeholder">
-            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-              <polygon points="5 3 19 12 5 21 5 3"/>
-            </svg>
-            <span class="card-placeholder-text">Video tulossa</span>
-          </div>
-        </div>
-        <div class="card-body">
-          <div class="card-meta">
-            <span class="platform-tag tiktok">TikTok</span>
-          </div>
-          <div class="card-caption">
-            FAQ-video — vastaa yleisimpiin kysymyksiin tuotteesta tai palvelusta. Rakentaa luottamusta ja asiantuntijuutta.
-          </div>
-          <div class="card-actions">
-            <button class="action-btn approve" onclick="approveCard(this)">✓ &nbsp;Hyväksyn</button>
-            <button class="action-btn request" onclick="requestChanges(this)">✗ &nbsp;Muutoksia</button>
-          </div>
-          <div class="feedback-box">
-            <textarea class="feedback-textarea" placeholder="Kerro mitä haluatte muuttaa..."></textarea>
-          </div>
-        </div>
-      </div>
-
-    </div><!-- /content-grid -->
-
-    <!-- Submit bar -->
-    <div class="submit-bar">
+    <div class="content-grid" id="content-grid"></div>
+    <div class="submit-bar" id="submit-bar">
       <div class="submit-status" id="submit-status">
-        Valitsette toiminnon jokaiselle sisällölle ennen lähettämistä.
+        Valitse toiminto jokaiselle sisällölle ennen lähettämistä.
       </div>
-      <button class="submit-approval" id="submit-btn" onclick="submitApproval()" disabled>
+      <button class="submit-approval" id="submit-btn" onclick="submitAll()" disabled>
         Lähetä hyväksynnät →
       </button>
     </div>
@@ -1060,60 +549,62 @@
     </div>
   </div>
 
-  <!-- FOOTER -->
   <div class="portal-footer">
-    <div class="portal-footer-credit">© 2025 RN Media &nbsp;·&nbsp; rnmedia.fi</div>
-    <div class="portal-footer-logo">RN MEDIA</div>
+    <div class="portal-footer-credit">© <span id="footer-year"></span> RN Media &nbsp;·&nbsp; rnmedia.fi</div>
+    <div class="portal-footer-logo">RN Media</div>
   </div>
 
-</div><!-- /portal -->
+</div>
 
 <script>
-  // ── PIN ──────────────────────────────────────────────
-  const CORRECT_PIN = '2025';
+  const PIN_LEN = 6;
   let pinValue = '';
 
   function pinPress(digit) {
-    if (pinValue.length >= 4) return;
+    if (pinValue.length >= PIN_LEN) return;
     pinValue += digit;
     updateDots();
-    if (pinValue.length === 4) {
-      setTimeout(checkPin, 120);
-    }
+    if (pinValue.length === PIN_LEN) setTimeout(checkPin, 120);
   }
 
   function pinDel() {
     pinValue = pinValue.slice(0, -1);
-    updateDots(false);
+    updateDots();
     document.getElementById('pin-error').textContent = '';
   }
 
-  function updateDots(checkReady) {
-    for (let i = 0; i < 4; i++) {
-      const dot = document.getElementById('d' + i);
-      dot.classList.toggle('filled', i < pinValue.length);
-      dot.classList.remove('error');
+  function updateDots() {
+    for (let i = 0; i < PIN_LEN; i++) {
+      const d = document.getElementById('d' + i);
+      d.classList.toggle('filled', i < pinValue.length);
+      d.classList.remove('error');
     }
   }
 
   function checkPin() {
-    if (pinValue === CORRECT_PIN) {
+    if (pinValue === ACCESS_PIN) {
+      sessionStorage.setItem('fora_auth', '1');
       document.getElementById('pin-screen').classList.add('hidden');
+      populateDashboard();
       document.getElementById('portal').classList.add('visible');
     } else {
-      for (let i = 0; i < 4; i++) {
-        document.getElementById('d' + i).classList.add('error');
-        document.getElementById('d' + i).classList.remove('filled');
+      const dotsEl = document.getElementById('pin-dots');
+      for (let i = 0; i < PIN_LEN; i++) {
+        const d = document.getElementById('d' + i);
+        d.classList.remove('filled');
+        d.classList.add('error');
       }
       document.getElementById('pin-error').textContent = 'Väärä PIN-koodi. Yritä uudelleen.';
+      dotsEl.style.animation = 'pinShake 0.4s ease';
       setTimeout(() => {
+        dotsEl.style.animation = '';
+        for (let i = 0; i < PIN_LEN; i++) document.getElementById('d' + i).classList.remove('error');
+        document.getElementById('pin-error').textContent = '';
         pinValue = '';
-        updateDots();
       }, 900);
     }
   }
 
-  // Keyboard support
   document.addEventListener('keydown', e => {
     if (document.getElementById('pin-screen').classList.contains('hidden')) return;
     if (e.key >= '0' && e.key <= '9') pinPress(e.key);
@@ -1121,6 +612,7 @@
   });
 
   function logout() {
+    sessionStorage.removeItem('fora_auth');
     pinValue = '';
     updateDots();
     document.getElementById('pin-error').textContent = '';
@@ -1128,138 +620,209 @@
     document.getElementById('pin-screen').classList.remove('hidden');
   }
 
-  // ── COLOR PICKERS ─────────────────────────────────────
-  function syncHex(colorInput, hexId) {
-    document.getElementById(hexId).value = colorInput.value;
-    updateColorsHidden();
-  }
-  function syncColor(hexInput, colorId) {
-    const val = hexInput.value;
-    if (/^#[0-9a-fA-F]{6}$/.test(val)) {
-      document.getElementById(colorId).value = val;
-      updateColorsHidden();
-    }
-  }
-  function updateColorsHidden() {
-    const c = [
-      document.getElementById('hex1').value,
-      document.getElementById('hex2').value,
-      document.getElementById('hex3').value,
-    ].join(', ');
-    document.getElementById('colors-hidden').value = c;
+  function monthFI() {
+    const m = ["Tammikuu","Helmikuu","Maaliskuu","Huhtikuu","Toukokuu","Kesäkuu",
+               "Heinäkuu","Elokuu","Syyskuu","Lokakuu","Marraskuu","Joulukuu"];
+    const n = new Date();
+    return m[n.getMonth()] + ' ' + n.getFullYear();
   }
 
-  // ── ONBOARDING FORM ───────────────────────────────────
-  document.getElementById('onboarding-form').addEventListener('submit', async function(e) {
-    e.preventDefault();
-    const btn = this.querySelector('.form-submit');
-    btn.disabled = true;
-    btn.textContent = 'Lähetetään...';
-    try {
-      const res = await fetch(this.action, {
-        method: 'POST',
-        body: new FormData(this),
-        headers: { 'Accept': 'application/json' }
-      });
-      if (res.ok) {
-        document.getElementById('onboarding-success').style.display = 'block';
-        btn.style.display = 'none';
+  function populateDashboard() {
+    const d = CLIENT_DATA;
+    document.getElementById('hdr-client').textContent  = d.clientName;
+    document.getElementById('hdr-month').textContent   = monthFI();
+    document.getElementById('hdr-pkg').textContent     = d.package;
+    document.getElementById('footer-year').textContent = new Date().getFullYear();
+
+    document.getElementById('sv-num').textContent = d.videosDeliveredThisMonth;
+    document.getElementById('sv-tot').textContent = d.videosTotal;
+    document.getElementById('pv').style.width = pct(d.videosDeliveredThisMonth, d.videosTotal);
+
+    document.getElementById('sp-num').textContent = d.postsScheduled;
+    document.getElementById('sp-tot').textContent = d.postsTotal;
+    document.getElementById('pp').style.width = pct(d.postsScheduled, d.postsTotal);
+
+    document.getElementById('ss-date').textContent = d.nextShootDate || '—';
+    document.getElementById('ss-report-date').textContent = d.nextReportDate ? 'Pvm: ' + d.nextReportDate : '';
+
+    const pillMap = { 'Tulossa': ['pill-coming','Tulossa'], 'Valmis': ['pill-ready','Valmis'], 'Lähetetty': ['pill-sent','Lähetetty'] };
+    const [cls, lbl] = pillMap[d.reportStatus] || ['pill-coming', d.reportStatus];
+    document.getElementById('ss-report-pill').innerHTML = `<span class="stat-pill ${cls}">${lbl}</span>`;
+
+    if (d.monthlyNote && d.monthlyNote.trim()) {
+      document.getElementById('monthly-note-box').style.display = 'block';
+      document.getElementById('monthly-note-text').textContent = d.monthlyNote;
+    }
+
+    buildGrid(d.contentItems || [], d.formspreeId);
+  }
+
+  function pct(val, total) {
+    return total > 0 ? Math.min(100, val / total * 100) + '%' : '0%';
+  }
+
+  function buildGrid(items, formId) {
+    const grid = document.getElementById('content-grid');
+    grid.innerHTML = '';
+    if (!items.length) {
+      grid.innerHTML = '<div class="content-empty">Ei sisältöjä tällä hetkellä</div>';
+      document.getElementById('submit-bar').style.display = 'none';
+      return;
+    }
+    items.forEach(item => {
+      const st = item.status || 'Odottaa';
+      const card = document.createElement('div');
+      card.className = 'content-card' + (st === 'Hyväksytty' ? ' approved' : st === 'Muutoksia pyydetty' ? ' changes' : '');
+      card.dataset.id = item.id;
+
+      const platClass = { TikTok: 'tiktok', Instagram: 'instagram', Reels: 'reels' }[item.platform] || 'tiktok';
+      const stClsMap  = { 'Odottaa': 'status-waiting', 'Hyväksytty': 'status-approved', 'Muutoksia pyydetty': 'status-changes' };
+
+      let media = '';
+      if (item.embedUrl) {
+        if (/youtube\.com|youtu\.be/.test(item.embedUrl)) {
+          const vid = item.embedUrl.match(/(?:v=|youtu\.be\/)([^&?/]+)/)?.[1] || '';
+          media = `<iframe src="https://www.youtube.com/embed/${vid}" allowfullscreen></iframe>`;
+        } else if (/vimeo\.com/.test(item.embedUrl)) {
+          const vid = item.embedUrl.match(/vimeo\.com\/(\d+)/)?.[1] || '';
+          media = `<iframe src="https://player.vimeo.com/video/${vid}" allowfullscreen></iframe>`;
+        } else {
+          media = `<video src="${item.embedUrl}" controls playsinline></video>`;
+        }
+      } else if (item.thumbnailUrl) {
+        media = `<img src="${item.thumbnailUrl}" alt="">`;
       } else {
-        btn.disabled = false;
-        btn.textContent = 'Yritä uudelleen';
+        const icon = item.type === 'image'
+          ? `<rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/>`
+          : `<polygon points="5 3 19 12 5 21 5 3"/>`;
+        const label = item.type === 'image' ? 'Kuva tulossa' : 'Video tulossa';
+        media = `<div class="card-placeholder">
+          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">${icon}</svg>
+          <span class="card-placeholder-text">${label}</span>
+        </div>`;
       }
-    } catch {
-      btn.disabled = false;
-      btn.textContent = 'Yritä uudelleen';
-    }
-  });
 
-  // ── CONTENT APPROVAL ──────────────────────────────────
-  function approveCard(btn) {
-    const card = btn.closest('.content-card');
-    card.classList.remove('changes');
-    card.classList.add('approved');
-    const fbBox = card.querySelector('.feedback-box');
-    fbBox.classList.remove('open');
-    const allBtns = card.querySelectorAll('.action-btn');
-    allBtns.forEach(b => b.classList.remove('active'));
-    btn.classList.add('active');
+      const approvedHide = st === 'Hyväksytty' ? 'style="display:none"' : '';
+      const fbOpen = st === 'Muutoksia pyydetty' ? 'open' : '';
+      const approveActive = st === 'Hyväksytty' ? ' active' : '';
+      const requestActive = st === 'Muutoksia pyydetty' ? ' active' : '';
+
+      card.innerHTML = `
+        <div class="card-media">${media}</div>
+        <div class="card-body">
+          <div class="card-meta">
+            <span class="platform-tag ${platClass}">${item.platform}</span>
+            <span class="status-tag ${stClsMap[st] || 'status-waiting'}" id="stag-${item.id}">${st}</span>
+          </div>
+          <div class="card-caption">${item.caption || ''}</div>
+          <div class="card-actions" id="actions-${item.id}" ${approvedHide}>
+            <button class="action-btn approve${approveActive}" onclick="approveCard('${item.id}')">✓ &nbsp;Hyväksyn</button>
+            <button class="action-btn request${requestActive}" onclick="requestChanges('${item.id}')">✗ &nbsp;Muutoksia</button>
+          </div>
+          <div class="feedback-box ${fbOpen}" id="fb-${item.id}">
+            <textarea class="feedback-textarea" id="fbt-${item.id}" placeholder="Kerro mitä haluatte muuttaa..."></textarea>
+            <button class="feedback-send-btn" onclick="sendFeedback('${item.id}','${formId}','${(item.caption||'').replace(/'/g,"\\'")}')">Lähetä palaute</button>
+            <div class="feedback-sent" id="fbsent-${item.id}">✓ Palaute lähetetty!</div>
+          </div>
+        </div>`;
+      grid.appendChild(card);
+    });
     updateSubmitStatus();
   }
 
-  function requestChanges(btn) {
-    const card = btn.closest('.content-card');
-    card.classList.remove('approved');
-    card.classList.add('changes');
-    const fbBox = card.querySelector('.feedback-box');
-    fbBox.classList.add('open');
-    const allBtns = card.querySelectorAll('.action-btn');
-    allBtns.forEach(b => b.classList.remove('active'));
-    btn.classList.add('active');
+  function approveCard(id) {
+    const card = document.querySelector(`[data-id="${id}"]`);
+    card.className = 'content-card approved';
+    document.getElementById('stag-' + id).className = 'status-tag status-approved';
+    document.getElementById('stag-' + id).textContent = 'Hyväksytty';
+    document.getElementById('fb-' + id).classList.remove('open');
+    const btns = document.getElementById('actions-' + id).querySelectorAll('.action-btn');
+    btns.forEach(b => b.classList.remove('active'));
+    btns[0].classList.add('active');
     updateSubmitStatus();
+  }
+
+  function requestChanges(id) {
+    const card = document.querySelector(`[data-id="${id}"]`);
+    card.className = 'content-card changes';
+    document.getElementById('stag-' + id).className = 'status-tag status-changes';
+    document.getElementById('stag-' + id).textContent = 'Muutoksia pyydetty';
+    document.getElementById('fb-' + id).classList.add('open');
+    const btns = document.getElementById('actions-' + id).querySelectorAll('.action-btn');
+    btns.forEach(b => b.classList.remove('active'));
+    btns[1].classList.add('active');
+    updateSubmitStatus();
+  }
+
+  async function sendFeedback(id, formId, caption) {
+    const ta = document.getElementById('fbt-' + id);
+    const msg = ta.value.trim() || '(ei viestiä)';
+    if (!formId || formId === 'YOUR_FORMSPREE_ID') { alert('Formspree-tunnus puuttuu.'); return; }
+    const btn = ta.nextElementSibling;
+    btn.disabled = true;
+    try {
+      const r = await fetch('https://formspree.io/f/' + formId, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+        body: JSON.stringify({ _subject: 'Muutospyyntö — ' + CLIENT_DATA.clientName, card_id: id, caption, feedback: msg }),
+      });
+      if (r.ok) {
+        ta.disabled = true;
+        document.getElementById('fbsent-' + id).style.display = 'block';
+      } else { btn.disabled = false; alert('Lähetys epäonnistui. Yritä uudelleen.'); }
+    } catch { btn.disabled = false; alert('Verkkovirhe.'); }
   }
 
   function updateSubmitStatus() {
     const cards = document.querySelectorAll('.content-card');
-    let approved = 0, changes = 0, total = cards.length;
+    let approved = 0, changes = 0;
     cards.forEach(c => {
       if (c.classList.contains('approved')) approved++;
-      if (c.classList.contains('changes')) changes++;
+      if (c.classList.contains('changes'))  changes++;
     });
-    const done = approved + changes;
+    const done = approved + changes, total = cards.length;
     const statusEl = document.getElementById('submit-status');
-    const submitBtn = document.getElementById('submit-btn');
-
-    if (done === total) {
+    const btn = document.getElementById('submit-btn');
+    if (done === total && total > 0) {
       statusEl.innerHTML = `<strong>${approved} hyväksytty</strong>, ${changes} muutospyyntöä — kaikki käyty läpi.`;
-      submitBtn.disabled = false;
+      btn.disabled = false;
     } else {
       statusEl.innerHTML = `${done} / ${total} käyty läpi — <strong>${total - done} jäljellä</strong>.`;
-      submitBtn.disabled = true;
+      btn.disabled = true;
     }
   }
 
-  async function submitApproval() {
+  async function submitAll() {
     const cards = document.querySelectorAll('.content-card');
     const rows = [];
-
     cards.forEach(card => {
       const id = card.dataset.id;
       const platform = card.querySelector('.platform-tag').textContent.trim();
-      const caption = card.querySelector('.card-caption').textContent.trim().substring(0, 80) + '...';
-      const status = card.classList.contains('approved') ? '✓ Hyväksytty' : '✗ Muutospyyntö';
-      const feedback = card.querySelector('.feedback-textarea').value.trim();
-      rows.push(`Sisältö ${id} (${platform})\nTila: ${status}\nKuvaus: ${caption}${feedback ? '\nPalaute: ' + feedback : ''}`);
+      const caption  = card.querySelector('.card-caption').textContent.trim().slice(0, 80) + '...';
+      const status   = card.classList.contains('approved') ? '✓ Hyväksytty' : '✗ Muutospyyntö';
+      const fb       = card.querySelector('.feedback-textarea')?.value.trim() || '';
+      rows.push(`Sisältö ${id} (${platform})\nTila: ${status}\nKuvaus: ${caption}${fb ? '\nPalaute: ' + fb : ''}`);
     });
-
-    const body = rows.join('\n\n---\n\n');
-
-    const formData = new FormData();
-    formData.append('_subject', 'Förå Oy – Sisällön hyväksynnät');
-    formData.append('asiakas', 'Förå Oy');
-    formData.append('hyväksynnät', body);
-
     const btn = document.getElementById('submit-btn');
-    btn.disabled = true;
-    btn.textContent = 'Lähetetään...';
-
+    btn.disabled = true; btn.textContent = 'Lähetetään...';
     try {
-      const res = await fetch('https://formspree.io/f/mdajqwqr', {
-        method: 'POST',
-        body: formData,
-        headers: { 'Accept': 'application/json' }
-      });
-      if (res.ok) {
-        document.querySelector('.submit-bar').style.display = 'none';
+      const fd = new FormData();
+      fd.append('_subject', CLIENT_DATA.clientName + ' – Sisällön hyväksynnät');
+      fd.append('asiakas', CLIENT_DATA.clientName);
+      fd.append('hyväksynnät', rows.join('\n\n---\n\n'));
+      const r = await fetch('https://formspree.io/f/' + CLIENT_DATA.formspreeId, { method: 'POST', body: fd, headers: { 'Accept': 'application/json' } });
+      if (r.ok) {
+        document.getElementById('submit-bar').style.display = 'none';
         document.getElementById('approval-success').style.display = 'block';
-      } else {
-        btn.disabled = false;
-        btn.textContent = 'Yritä uudelleen';
-      }
-    } catch {
-      btn.disabled = false;
-      btn.textContent = 'Yritä uudelleen';
-    }
+      } else { btn.disabled = false; btn.textContent = 'Lähetä hyväksynnät →'; alert('Lähetys epäonnistui.'); }
+    } catch { btn.disabled = false; btn.textContent = 'Lähetä hyväksynnät →'; alert('Verkkovirhe.'); }
+  }
+
+  // Init — skip PIN if session already authenticated
+  if (sessionStorage.getItem('fora_auth') === '1') {
+    document.getElementById('pin-screen').classList.add('hidden');
+    populateDashboard();
+    document.getElementById('portal').classList.add('visible');
   }
 </script>
 </body>
